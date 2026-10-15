@@ -268,8 +268,8 @@
                     <button onclick="selectBeansLevel('3')" id="btn-lv-3" class="py-2 px-1 text-[11px] font-bold rounded-lg bg-purple-900/80 text-purple-200 border border-purple-600 transition-all cinzel-font">Lv.3</button>
                 </div>
 
-                <!-- ビーンズ一覧グリッド -->
-                <div id="beans-grid" class="grid grid-cols-2 gap-2 text-left mb-4 max-h-72 overflow-y-auto pr-1">
+                <!-- ビーンズ一覧コンテナ（全Lv時はスクロールなしで全表示、個別Lv時はスクロール表示） -->
+                <div id="beans-container" class="mb-4">
                     <!-- JSで動的生成 -->
                 </div>
 
@@ -308,7 +308,6 @@
 
     <!-- JavaScript ロジック -->
     <script>
-        // データの定義
         const trickItems = [
             { id: 1, name: "小悪魔のいたずら", desc: "Lv.1のビーンズ1粒 😈" },
             { id: 2, name: "魔女の気まぐれ", desc: "Lv.2のビーンズ1粒 🔮" },
@@ -327,9 +326,7 @@
             { id: 6, name: "ご褒美セレクト", desc: "チョコ or おつまみ 🤎" }
         ];
 
-        // 百味ビーンズデータ（画像に準拠）
         const beansData = [
-            // Lv.1 Sweet & Easy (小悪魔のいたずら)
             { id: 101, lv: 1, lvName: "Lv.1 小悪魔", name: "チェリー", desc: "甘酸っぱいチェリー味 🍒" },
             { id: 102, lv: 1, lvName: "Lv.1 小悪魔", name: "綿菓子", desc: "ふわふわ甘い綿菓子味 ☁️" },
             { id: 103, lv: 1, lvName: "Lv.1 小悪魔", name: "ブルーベリー", desc: "ジューシーブルーベリー 🫐" },
@@ -338,7 +335,6 @@
             { id: 106, lv: 1, lvName: "Lv.1 小悪魔", name: "レモン", desc: "すっぱレモン味 🍋" },
             { id: 107, lv: 1, lvName: "Lv.1 小悪魔", name: "スイカ", desc: "夏香るスイカ味 🍉" },
 
-            // Lv.2 Tricky Flavors (魔女の気まぐれ)
             { id: 201, lv: 2, lvName: "Lv.2 魔女", name: "シナモン", desc: "スパイシーシナモン味 🤎" },
             { id: 202, lv: 2, lvName: "Lv.2 魔女", name: "黒コショウ", desc: "ピリッとスパイシー ⚫" },
             { id: 203, lv: 2, lvName: "Lv.2 魔女", name: "せっけん", desc: "泡立つふしぎな味 🧼" },
@@ -346,7 +342,6 @@
             { id: 205, lv: 2, lvName: "Lv.2 魔女", name: "砂糖漬け果物", desc: "甘いドライフルーツ味 🍊" },
             { id: 206, lv: 2, lvName: "Lv.2 魔女", name: "バナナ", desc: "まろやかバナナ味 🍌" },
 
-            // Lv.3 Cursed Flavors (禁断の一粒)
             { id: 301, lv: 3, lvName: "Lv.3 禁断", name: "耳あか", desc: "閲覧注意の耳あか味 👂" },
             { id: 302, lv: 3, lvName: "Lv.3 禁断", name: "ミミズ", desc: "地中を這うミミズ味 🪱" },
             { id: 303, lv: 3, lvName: "Lv.3 禁断", name: "土", desc: "リアルな泥・土味 🟤" },
@@ -359,7 +354,6 @@
         let currentBeansLv = 'all';
         let historyData = [];
 
-        // タブ切り替え
         function switchTab(tab) {
             const rouletteView = document.getElementById('view-roulette');
             const beansView = document.getElementById('view-beans');
@@ -380,7 +374,6 @@
             }
         }
 
-        // ビーンズのレベル選択
         function selectBeansLevel(lv) {
             currentBeansLv = lv;
             ['all', '1', '2', '3'].forEach(l => {
@@ -394,25 +387,64 @@
             renderBeansGrid();
         }
 
-        // ビーンズ一覧の描画
+        // ビーンズ一覧の描画（全Lv時はスクロールなしで全表示、個別Lv時はスクロール表示）
         function renderBeansGrid() {
-            const grid = document.getElementById('beans-grid');
-            const filteredBeans = currentBeansLv === 'all' 
-                ? beansData 
-                : beansData.filter(b => b.lv.toString() === currentBeansLv);
+            const container = document.getElementById('beans-container');
 
-            grid.innerHTML = filteredBeans.map(b => `
-                <div id="beans-card-${b.id}" class="beans-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[60px]">
-                    <div class="flex items-center justify-between text-[10px] font-bold text-amber-300">
-                        <span>${b.name}</span>
-                        <span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-900 text-purple-300 border border-purple-700">${b.lvName}</span>
+            if (currentBeansLv === 'all') {
+                // 全Lv時：スクロールなし、セクションごとに見出し付きで全表示
+                const lv1Items = beansData.filter(b => b.lv === 1);
+                const lv2Items = beansData.filter(b => b.lv === 2);
+                const lv3Items = beansData.filter(b => b.lv === 3);
+
+                const renderCards = (items) => items.map(b => `
+                    <div id="beans-card-${b.id}" class="beans-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[55px]">
+                        <div class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+                            <span>${b.name}</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-900 text-purple-300 border border-purple-700">${b.lvName}</span>
+                        </div>
+                        <div class="text-[10px] text-purple-200 mt-1 truncate">${b.desc}</div>
                     </div>
-                    <div class="text-[10px] text-purple-200 mt-1 truncate">${b.desc}</div>
-                </div>
-            `).join('');
+                `).join('');
+
+                container.innerHTML = `
+                    <div class="space-y-3 text-left">
+                        <div>
+                            <div class="text-xs font-bold text-amber-300 cinzel-font mb-1.5 border-b border-purple-800 pb-0.5">✨ Lv.1 小悪魔のいたずら</div>
+                            <div class="grid grid-cols-2 gap-2">${renderCards(lv1Items)}</div>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-purple-300 cinzel-font mb-1.5 border-b border-purple-800 pb-0.5">🔮 Lv.2 魔女の気まぐれ</div>
+                            <div class="grid grid-cols-2 gap-2">${renderCards(lv2Items)}</div>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-pink-400 cinzel-font mb-1.5 border-b border-purple-800 pb-0.5">👑 Lv.3 禁断の一粒</div>
+                            <div class="grid grid-cols-2 gap-2">${renderCards(lv3Items)}</div>
+                        </div>
+                    </div>
+                `;
+                // 全表示時は高制限を解除
+                container.style.maxHeight = 'none';
+                container.style.overflowY = 'visible';
+            } else {
+                // 個別Lv選択時：スクロールありのグリッド表示
+                const filteredBeans = beansData.filter(b => b.lv.toString() === currentBeansLv);
+                container.innerHTML = `
+                    <div id="beans-grid" class="grid grid-cols-2 gap-2 text-left max-h-72 overflow-y-auto pr-1">
+                        ${filteredBeans.map(b => `
+                            <div id="beans-card-${b.id}" class="beans-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[60px]">
+                                <div class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+                                    <span>${b.name}</span>
+                                    <span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-900 text-purple-300 border border-purple-700">${b.lvName}</span>
+                                </div>
+                                <div class="text-[10px] text-purple-200 mt-1 truncate">${b.desc}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
         }
 
-        // 履歴管理
         function addHistory(type, title, detail) {
             const now = new Date();
             const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -454,7 +486,6 @@
             renderHistory();
         }
 
-        // コイントスアニメーション
         function tossCoin() {
             const coin = document.getElementById('coin');
             const btn = document.getElementById('coin-btn');
@@ -484,7 +515,6 @@
             }, 1000);
         }
 
-        // ルーレット機能（TRICK / TREAT）
         function spinRoulette(type) {
             const items = type === 'trick' ? trickItems : treatItems;
             const btnEl = document.getElementById(`${type}-btn`);
@@ -529,7 +559,6 @@
             }, intervalTime);
         }
 
-        // 百味ビーンズ ルーレット機能
         function spinBeansRoulette() {
             const targetBeans = currentBeansLv === 'all' 
                 ? beansData 
@@ -588,7 +617,6 @@
             }, intervalTime);
         }
 
-        // 初期化
         window.onload = () => {
             renderBeansGrid();
         };
