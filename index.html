@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moonlit Candy Atelier - 運命の6マスをチェック！</title>
+    <title>Moonlit Candy Atelier - 運命の6マス＆百味ビーンズガイド</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- Google Fonts -->
@@ -35,10 +35,10 @@
         .animate-spin-coin {
             animation: coinSpin 1s cubic-bezier(0.15, 0.85, 0.35, 1.2) forwards;
         }
-        .menu-card {
+        .menu-card, .beans-card {
             transition: all 0.2s ease;
         }
-        .menu-card.active-highlight {
+        .menu-card.active-highlight, .beans-card.active-highlight {
             transform: scale(1.04);
             border-color: #f59e0b !important;
             background: rgba(120, 53, 15, 0.85) !important;
@@ -56,191 +56,232 @@
             <h1 class="cinzel-font text-2xl md:text-3xl font-black text-amber-400 glow-gold tracking-wider">
                 Moonlit Candy Atelier
             </h1>
-            <p class="text-[11px] text-purple-300 tracking-wider">🌙 月夜の魔法菓子店 ── ROULETTE MENU</p>
+            <p class="text-[11px] text-purple-300 tracking-wider">🌙 月夜の魔法菓子店 ── ROULETTE & BEANS</p>
         </header>
 
-        <!-- 【1】コイントスセクション -->
-        <section class="glass-panel rounded-2xl p-4 text-center relative overflow-hidden">
-            <h2 class="cinzel-font text-base font-bold text-amber-300 mb-1 flex items-center justify-center gap-2">
-                <span>🪙</span> COIN TOSS <span>🪙</span>
-            </h2>
-            <p class="text-[11px] text-purple-200 mb-3">コインを投げて、運命のルートを決めよう！</p>
-
-            <!-- コイン表示部 -->
-            <div class="flex justify-center mb-3">
-                <div id="coin-container" class="w-20 h-20 rounded-full bg-gradient-to-br from-amber-200 via-yellow-400 to-amber-600 p-1 shadow-xl shadow-amber-500/30 flex items-center justify-center border-2 border-amber-100">
-                    <div id="coin" class="w-full h-full rounded-full border border-amber-900/40 flex flex-col items-center justify-center bg-gradient-to-tr from-amber-500 to-yellow-300 text-purple-950 font-black cinzel-font text-xs shadow-inner">
-                        <span id="coin-text" class="text-[11px] tracking-tighter font-black">TRICK</span>
-                        <span class="text-[8px] opacity-75">or</span>
-                        <span id="coin-subtext" class="text-[11px] tracking-tighter font-black">TREAT</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- トスボタン -->
-            <button onclick="tossCoin()" id="coin-btn" class="w-full py-2.5 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-purple-950 font-black rounded-xl shadow-lg hover:brightness-110 active:scale-95 transition-all cinzel-font tracking-wider text-xs border border-amber-200">
-                COIN TOSS START
+        <!-- タブ切り替えボタン -->
+        <div class="flex rounded-xl p-1 bg-purple-950/80 border border-purple-700/60 gap-1">
+            <button onclick="switchTab('roulette')" id="tab-roulette" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all cinzel-font bg-amber-500 text-purple-950 shadow">
+                ROULETTE MENU
             </button>
-            <div id="coin-result" class="mt-2 text-xs font-bold text-amber-300 h-5"></div>
-        </section>
-
-        <!-- 【2】ルーレットセクション：TRICK (6マス一覧) -->
-        <section class="glass-panel rounded-2xl p-4 space-y-3 border-purple-600/50">
-            <div class="flex items-center justify-between">
-                <h3 class="cinzel-font text-sm font-bold text-purple-300 flex items-center gap-1.5">
-                    <span>👻</span> TRICK 運命の6マス
-                </h3>
-                <span class="text-[10px] bg-purple-900/80 text-purple-200 px-2 py-0.5 rounded-full border border-purple-700">全6種</span>
-            </div>
-
-            <!-- 6マス一覧グリッド（静的配置） -->
-            <div class="grid grid-cols-2 gap-2">
-                <div id="trick-card-1" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                    <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
-                        <span>①小悪魔のいたずら</span>
-                        <span class="text-[9px] text-purple-400">No.1</span>
-                    </div>
-                    <div class="my-0.5">
-                        <div class="text-xs font-bold text-pink-100 truncate">小悪魔のいたずら</div>
-                        <div class="text-[10px] text-purple-300 truncate">Lv.1のビーンズ1粒 😈</div>
-                    </div>
-                </div>
-                <div id="trick-card-2" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                    <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
-                        <span>②魔女の気まぐれ</span>
-                        <span class="text-[9px] text-purple-400">No.2</span>
-                    </div>
-                    <div class="my-0.5">
-                        <div class="text-xs font-bold text-pink-100 truncate">魔女の気まぐれ</div>
-                        <div class="text-[10px] text-purple-300 truncate">Lv.2のビーンズ1粒 🔮</div>
-                    </div>
-                </div>
-                <div id="trick-card-3" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                    <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
-                        <span>③禁断の一粒</span>
-                        <span class="text-[9px] text-purple-400">No.3</span>
-                    </div>
-                    <div class="my-0.5">
-                        <div class="text-xs font-bold text-pink-100 truncate">禁断の一粒</div>
-                        <div class="text-[10px] text-purple-300 truncate">Lv.3のビーンズ1粒 👑</div>
-                    </div>
-                </div>
-                <div id="trick-card-4" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                    <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
-                        <span>④リスナーの悪だくみ</span>
-                        <span class="text-[9px] text-purple-400">No.4</span>
-                    </div>
-                    <div class="my-0.5">
-                        <div class="text-xs font-bold text-pink-100 truncate">リスナーの悪だくみ</div>
-                        <div class="text-[10px] text-purple-300 truncate">Lv.1～3を指定 ❓</div>
-                    </div>
-                </div>
-                <div id="trick-card-5" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                    <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
-                        <span>⑤いたずら回避！</span>
-                        <span class="text-[9px] text-purple-400">No.5</span>
-                    </div>
-                    <div class="my-0.5">
-                        <div class="text-xs font-bold text-pink-100 truncate">いたずら回避！</div>
-                        <div class="text-[10px] text-purple-300 truncate">チョコ1個 🍫</div>
-                    </div>
-                </div>
-                <div id="trick-card-6" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                    <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
-                        <span>⑥運命の一粒</span>
-                        <span class="text-[9px] text-purple-400">No.6</span>
-                    </div>
-                    <div class="my-0.5">
-                        <div class="text-xs font-bold text-pink-100 truncate">運命の一粒</div>
-                        <div class="text-[10px] text-purple-300 truncate">全レベルからランダム 🎁</div>
-                    </div>
-                </div>
-            </div>
-
-            <button onclick="spinRoulette('trick')" id="trick-btn" class="w-full py-2.5 bg-gradient-to-r from-purple-700 via-purple-800 to-purple-950 text-purple-100 font-bold rounded-xl shadow hover:brightness-110 active:scale-95 transition-all text-xs cinzel-font tracking-wider border border-purple-500/50">
-                TRICK ルーレット START
+            <button onclick="switchTab('beans')" id="tab-beans" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all cinzel-font text-purple-300 hover:text-amber-300">
+                BEANS GUIDE
             </button>
-        </section>
+        </div>
 
-        <!-- 【3】ルーレットセクション：TREAT (6マス一覧) -->
-        <section class="glass-panel rounded-2xl p-4 space-y-3 border-amber-600/50">
-            <div class="flex items-center justify-between">
-                <h3 class="cinzel-font text-sm font-bold text-amber-300 flex items-center gap-1.5">
-                    <span>🍬</span> TREAT 運命の6マス
-                </h3>
-                <span class="text-[10px] bg-amber-900/80 text-amber-200 px-2 py-0.5 rounded-full border border-amber-700">全6種</span>
-            </div>
+        <!-- ================= 1. ROULETTE タブ画面 ================= -->
+        <div id="view-roulette" class="space-y-6">
+            
+            <!-- コイントスセクション -->
+            <section class="glass-panel rounded-2xl p-4 text-center relative overflow-hidden">
+                <h2 class="cinzel-font text-base font-bold text-amber-300 mb-1 flex items-center justify-center gap-2">
+                    <span>🪙</span> COIN TOSS <span>🪙</span>
+                </h2>
+                <p class="text-[11px] text-purple-200 mb-3">コインを投げて、運命のルートを決めよう！</p>
 
-            <!-- 6マス一覧グリッド（静的配置） -->
-            <div class="grid grid-cols-2 gap-2">
-                <div id="treat-card-1" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                    <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
-                        <span>①チョコ</span>
-                        <span class="text-[9px] text-amber-400">No.1</span>
-                    </div>
-                    <div class="my-0.5">
-                        <div class="text-xs font-bold text-amber-100 truncate">チョコ</div>
-                        <div class="text-[10px] text-amber-200/80 truncate">チョコ1個 🍫</div>
+                <div class="flex justify-center mb-3">
+                    <div id="coin-container" class="w-20 h-20 rounded-full bg-gradient-to-br from-amber-200 via-yellow-400 to-amber-600 p-1 shadow-xl shadow-amber-500/30 flex items-center justify-center border-2 border-amber-100">
+                        <div id="coin" class="w-full h-full rounded-full border border-amber-900/40 flex flex-col items-center justify-center bg-gradient-to-tr from-amber-500 to-yellow-300 text-purple-950 font-black cinzel-font text-xs shadow-inner">
+                            <span id="coin-text" class="text-[11px] tracking-tighter font-black">TRICK</span>
+                            <span class="text-[8px] opacity-75">or</span>
+                            <span id="coin-subtext" class="text-[11px] tracking-tighter font-black">TREAT</span>
+                        </div>
                     </div>
                 </div>
-                <div id="treat-card-2" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                    <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
-                        <span>②神座と乾杯！</span>
-                        <span class="text-[9px] text-amber-400">No.2</span>
-                    </div>
-                    <div class="my-0.5">
-                        <div class="text-xs font-bold text-amber-100 truncate">神座と乾杯！</div>
-                        <div class="text-[10px] text-amber-200/80 truncate">乾杯タイム 🥂</div>
-                    </div>
-                </div>
-                <div id="treat-card-3" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                    <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
-                        <span>③差し入れギフト</span>
-                        <span class="text-[9px] text-amber-400">No.3</span>
-                    </div>
-                    <div class="my-0.5">
-                        <div class="text-xs font-bold text-amber-100 truncate">差し入れギフト</div>
-                        <div class="text-[10px] text-amber-200/80 truncate">食べ物系ギフト(任意) 🎁</div>
-                    </div>
-                </div>
-                <div id="treat-card-4" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                    <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
-                        <span>④おつまみ</span>
-                        <span class="text-[9px] text-amber-400">No.4</span>
-                    </div>
-                    <div class="my-0.5">
-                        <div class="text-xs font-bold text-amber-100 truncate">おつまみ</div>
-                        <div class="text-[10px] text-amber-200/80 truncate">おつまみひと口 🧀</div>
-                    </div>
-                </div>
-                <div id="treat-card-5" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                    <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
-                        <span>⑤神座と乾杯！</span>
-                        <span class="text-[9px] text-amber-400">No.5</span>
-                    </div>
-                    <div class="my-0.5">
-                        <div class="text-xs font-bold text-amber-100 truncate">神座と乾杯！</div>
-                        <div class="text-[10px] text-amber-200/80 truncate">乾杯タイム 🥂</div>
-                    </div>
-                </div>
-                <div id="treat-card-6" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                    <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
-                        <span>⑥ご褒美セレクト</span>
-                        <span class="text-[9px] text-amber-400">No.6</span>
-                    </div>
-                    <div class="my-0.5">
-                        <div class="text-xs font-bold text-amber-100 truncate">ご褒美セレクト</div>
-                        <div class="text-[10px] text-amber-200/80 truncate">チョコ or おつまみ 🤎</div>
-                    </div>
-                </div>
-            </div>
 
-            <button onclick="spinRoulette('treat')" id="treat-btn" class="w-full py-2.5 bg-gradient-to-r from-amber-700 via-amber-800 to-amber-950 text-amber-100 font-bold rounded-xl shadow hover:brightness-110 active:scale-95 transition-all text-xs cinzel-font tracking-wider border border-amber-500/50">
-                TREAT ルーレット START
-            </button>
-        </section>
+                <button onclick="tossCoin()" id="coin-btn" class="w-full py-2.5 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-purple-950 font-black rounded-xl shadow-lg hover:brightness-110 active:scale-95 transition-all cinzel-font tracking-wider text-xs border border-amber-200">
+                    COIN TOSS START
+                </button>
+                <div id="coin-result" class="mt-2 text-xs font-bold text-amber-300 h-5"></div>
+            </section>
 
-        <!-- 【4】結果履歴セクション -->
+            <!-- TRICK 6マスルーレット -->
+            <section class="glass-panel rounded-2xl p-4 space-y-3 border-purple-600/50">
+                <div class="flex items-center justify-between">
+                    <h3 class="cinzel-font text-sm font-bold text-purple-300 flex items-center gap-1.5">
+                        <span>👻</span> TRICK 運命の6マス
+                    </h3>
+                    <span class="text-[10px] bg-purple-900/80 text-purple-200 px-2 py-0.5 rounded-full border border-purple-700">全6種</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div id="trick-card-1" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                        <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
+                            <span>①小悪魔のいたずら</span>
+                            <span class="text-[9px] text-purple-400">No.1</span>
+                        </div>
+                        <div class="my-0.5">
+                            <div class="text-xs font-bold text-pink-100 truncate">小悪魔のいたずら</div>
+                            <div class="text-[10px] text-purple-300 truncate">Lv.1のビーンズ1粒 😈</div>
+                        </div>
+                    </div>
+                    <div id="trick-card-2" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                        <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
+                            <span>②魔女の気まぐれ</span>
+                            <span class="text-[9px] text-purple-400">No.2</span>
+                        </div>
+                        <div class="my-0.5">
+                            <div class="text-xs font-bold text-pink-100 truncate">魔女の気まぐれ</div>
+                            <div class="text-[10px] text-purple-300 truncate">Lv.2のビーンズ1粒 🔮</div>
+                        </div>
+                    </div>
+                    <div id="trick-card-3" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                        <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
+                            <span>③禁断の一粒</span>
+                            <span class="text-[9px] text-purple-400">No.3</span>
+                        </div>
+                        <div class="my-0.5">
+                            <div class="text-xs font-bold text-pink-100 truncate">禁断の一粒</div>
+                            <div class="text-[10px] text-purple-300 truncate">Lv.3のビーンズ1粒 👑</div>
+                        </div>
+                    </div>
+                    <div id="trick-card-4" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                        <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
+                            <span>④リスナーの悪だくみ</span>
+                            <span class="text-[9px] text-purple-400">No.4</span>
+                        </div>
+                        <div class="my-0.5">
+                            <div class="text-xs font-bold text-pink-100 truncate">リスナーの悪だくみ</div>
+                            <div class="text-[10px] text-purple-300 truncate">Lv.1～3を指定 ❓</div>
+                        </div>
+                    </div>
+                    <div id="trick-card-5" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                        <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
+                            <span>⑤いたずら回避！</span>
+                            <span class="text-[9px] text-purple-400">No.5</span>
+                        </div>
+                        <div class="my-0.5">
+                            <div class="text-xs font-bold text-pink-100 truncate">いたずら回避！</div>
+                            <div class="text-[10px] text-purple-300 truncate">チョコ1個 🍫</div>
+                        </div>
+                    </div>
+                    <div id="trick-card-6" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                        <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
+                            <span>⑥運命の一粒</span>
+                            <span class="text-[9px] text-purple-400">No.6</span>
+                        </div>
+                        <div class="my-0.5">
+                            <div class="text-xs font-bold text-pink-100 truncate">運命の一粒</div>
+                            <div class="text-[10px] text-purple-300 truncate">全レベルからランダム 🎁</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="spinRoulette('trick')" id="trick-btn" class="w-full py-2.5 bg-gradient-to-r from-purple-700 via-purple-800 to-purple-950 text-purple-100 font-bold rounded-xl shadow hover:brightness-110 active:scale-95 transition-all text-xs cinzel-font tracking-wider border border-purple-500/50">
+                    TRICK ルーレット START
+                </button>
+            </section>
+
+            <!-- TREAT 6マスルーレット -->
+            <section class="glass-panel rounded-2xl p-4 space-y-3 border-amber-600/50">
+                <div class="flex items-center justify-between">
+                    <h3 class="cinzel-font text-sm font-bold text-amber-300 flex items-center gap-1.5">
+                        <span>🍬</span> TREAT 運命の6マス
+                    </h3>
+                    <span class="text-[10px] bg-amber-900/80 text-amber-200 px-2 py-0.5 rounded-full border border-amber-700">全6種</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div id="treat-card-1" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                        <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                            <span>①チョコ</span>
+                            <span class="text-[9px] text-amber-400">No.1</span>
+                        </div>
+                        <div class="my-0.5">
+                            <div class="text-xs font-bold text-amber-100 truncate">チョコ</div>
+                            <div class="text-[10px] text-amber-200/80 truncate">チョコ1個 🍫</div>
+                        </div>
+                    </div>
+                    <div id="treat-card-2" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                        <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                            <span>②神座と乾杯！</span>
+                            <span class="text-[9px] text-amber-400">No.2</span>
+                        </div>
+                        <div class="my-0.5">
+                            <div class="text-xs font-bold text-amber-100 truncate">神座と乾杯！</div>
+                            <div class="text-[10px] text-amber-200/80 truncate">乾杯タイム 🥂</div>
+                        </div>
+                    </div>
+                    <div id="treat-card-3" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                        <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                            <span>③差し入れギフト</span>
+                            <span class="text-[9px] text-amber-400">No.3</span>
+                        </div>
+                        <div class="my-0.5">
+                            <div class="text-xs font-bold text-amber-100 truncate">差し入れギフト</div>
+                            <div class="text-[10px] text-amber-200/80 truncate">食べ物系ギフト(任意) 🎁</div>
+                        </div>
+                    </div>
+                    <div id="treat-card-4" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                        <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                            <span>④おつまみ</span>
+                            <span class="text-[9px] text-amber-400">No.4</span>
+                        </div>
+                        <div class="my-0.5">
+                            <div class="text-xs font-bold text-amber-100 truncate">おつまみ</div>
+                            <div class="text-[10px] text-amber-200/80 truncate">おつまみひと口 🧀</div>
+                        </div>
+                    </div>
+                    <div id="treat-card-5" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                        <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                            <span>⑤神座と乾杯！</span>
+                            <span class="text-[9px] text-amber-400">No.5</span>
+                        </div>
+                        <div class="my-0.5">
+                            <div class="text-xs font-bold text-amber-100 truncate">神座と乾杯！</div>
+                            <div class="text-[10px] text-amber-200/80 truncate">乾杯タイム 🥂</div>
+                        </div>
+                    </div>
+                    <div id="treat-card-6" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                        <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                            <span>⑥ご褒美セレクト</span>
+                            <span class="text-[9px] text-amber-400">No.6</span>
+                        </div>
+                        <div class="my-0.5">
+                            <div class="text-xs font-bold text-amber-100 truncate">ご褒美セレクト</div>
+                            <div class="text-[10px] text-amber-200/80 truncate">チョコ or おつまみ 🤎</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="spinRoulette('treat')" id="treat-btn" class="w-full py-2.5 bg-gradient-to-r from-amber-700 via-amber-800 to-amber-950 text-amber-100 font-bold rounded-xl shadow hover:brightness-110 active:scale-95 transition-all text-xs cinzel-font tracking-wider border border-amber-500/50">
+                    TREAT ルーレット START
+                </button>
+            </section>
+
+        </div>
+
+        <!-- ================= 2. BEANS GUIDE タブ画面 ================= -->
+        <div id="view-beans" class="space-y-6 hidden">
+            
+            <section class="glass-panel rounded-2xl p-4 text-center relative overflow-hidden border-purple-500">
+                <h2 class="cinzel-font text-base font-bold text-amber-300 mb-1 flex items-center justify-center gap-2">
+                    <span>🍬</span> BEANS GUIDE <span>🍬</span>
+                </h2>
+                <p class="text-[11px] text-purple-200 mb-3">百味ビーンズ 難易度別ルーレット！</p>
+
+                <!-- レベル選択ボタン -->
+                <div class="grid grid-cols-4 gap-1.5 mb-4">
+                    <button onclick="selectBeansLevel('all')" id="btn-lv-all" class="py-2 px-1 text-[11px] font-bold rounded-lg bg-amber-500 text-purple-950 transition-all cinzel-font shadow">全Lv</button>
+                    <button onclick="selectBeansLevel('1')" id="btn-lv-1" class="py-2 px-1 text-[11px] font-bold rounded-lg bg-purple-900/80 text-purple-200 border border-purple-600 transition-all cinzel-font">Lv.1</button>
+                    <button onclick="selectBeansLevel('2')" id="btn-lv-2" class="py-2 px-1 text-[11px] font-bold rounded-lg bg-purple-900/80 text-purple-200 border border-purple-600 transition-all cinzel-font">Lv.2</button>
+                    <button onclick="selectBeansLevel('3')" id="btn-lv-3" class="py-2 px-1 text-[11px] font-bold rounded-lg bg-purple-900/80 text-purple-200 border border-purple-600 transition-all cinzel-font">Lv.3</button>
+                </div>
+
+                <!-- ビーンズ一覧グリッド -->
+                <div id="beans-grid" class="grid grid-cols-2 gap-2 text-left mb-4 max-h-72 overflow-y-auto pr-1">
+                    <!-- JSで動的生成 -->
+                </div>
+
+                <button onclick="spinBeansRoulette()" id="beans-btn" class="w-full py-3 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-purple-950 font-black rounded-xl shadow-lg hover:brightness-110 active:scale-95 transition-all cinzel-font tracking-wider text-xs border border-amber-200">
+                    BEANS ルーレット START 🎲
+                </button>
+                <div id="beans-result" class="mt-3 text-xs font-bold text-amber-300 h-6"></div>
+            </section>
+
+        </div>
+
+        <!-- ================= 共通：結果履歴セクション ================= -->
         <section class="glass-panel rounded-2xl p-4">
             <div class="flex items-center justify-between mb-2">
                 <h3 class="cinzel-font text-xs font-bold text-amber-300 flex items-center gap-1">
@@ -267,6 +308,7 @@
 
     <!-- JavaScript ロジック -->
     <script>
+        // データの定義
         const trickItems = [
             { id: 1, name: "小悪魔のいたずら", desc: "Lv.1のビーンズ1粒 😈" },
             { id: 2, name: "魔女の気まぐれ", desc: "Lv.2のビーンズ1粒 🔮" },
@@ -285,8 +327,92 @@
             { id: 6, name: "ご褒美セレクト", desc: "チョコ or おつまみ 🤎" }
         ];
 
+        // 百味ビーンズデータ（画像に準拠）
+        const beansData = [
+            // Lv.1 Sweet & Easy (小悪魔のいたずら)
+            { id: 101, lv: 1, lvName: "Lv.1 小悪魔", name: "チェリー", desc: "甘酸っぱいチェリー味 🍒" },
+            { id: 102, lv: 1, lvName: "Lv.1 小悪魔", name: "綿菓子", desc: "ふわふわ甘い綿菓子味 ☁️" },
+            { id: 103, lv: 1, lvName: "Lv.1 小悪魔", name: "ブルーベリー", desc: "ジューシーブルーベリー 🫐" },
+            { id: 104, lv: 1, lvName: "Lv.1 小悪魔", name: "青りんご", desc: "爽やか青りんご味 🍏" },
+            { id: 105, lv: 1, lvName: "Lv.1 小悪魔", name: "マシュマロ", desc: "やわらかマシュマロ味 🤍" },
+            { id: 106, lv: 1, lvName: "Lv.1 小悪魔", name: "レモン", desc: "すっぱレモン味 🍋" },
+            { id: 107, lv: 1, lvName: "Lv.1 小悪魔", name: "スイカ", desc: "夏香るスイカ味 🍉" },
+
+            // Lv.2 Tricky Flavors (魔女の気まぐれ)
+            { id: 201, lv: 2, lvName: "Lv.2 魔女", name: "シナモン", desc: "スパイシーシナモン味 🤎" },
+            { id: 202, lv: 2, lvName: "Lv.2 魔女", name: "黒コショウ", desc: "ピリッとスパイシー ⚫" },
+            { id: 203, lv: 2, lvName: "Lv.2 魔女", name: "せっけん", desc: "泡立つふしぎな味 🧼" },
+            { id: 204, lv: 2, lvName: "Lv.2 魔女", name: "ソーセージ", desc: "お肉なソーセージ味 🌭" },
+            { id: 205, lv: 2, lvName: "Lv.2 魔女", name: "砂糖漬け果物", desc: "甘いドライフルーツ味 🍊" },
+            { id: 206, lv: 2, lvName: "Lv.2 魔女", name: "バナナ", desc: "まろやかバナナ味 🍌" },
+
+            // Lv.3 Cursed Flavors (禁断の一粒)
+            { id: 301, lv: 3, lvName: "Lv.3 禁断", name: "耳あか", desc: "閲覧注意の耳あか味 👂" },
+            { id: 302, lv: 3, lvName: "Lv.3 禁断", name: "ミミズ", desc: "地中を這うミミズ味 🪱" },
+            { id: 303, lv: 3, lvName: "Lv.3 禁断", name: "土", desc: "リアルな泥・土味 🟤" },
+            { id: 304, lv: 3, lvName: "Lv.3 禁断", name: "鼻くそ", desc: "衝撃の鼻くそ味 👃" },
+            { id: 305, lv: 3, lvName: "Lv.3 禁断", name: "腐った卵", desc: "悪臭ただよう腐卵味 🥚" },
+            { id: 306, lv: 3, lvName: "Lv.3 禁断", name: "ゲロ", desc: "恐怖のゲロ味 🤢" },
+            { id: 307, lv: 3, lvName: "Lv.3 禁断", name: "草", desc: "生えたての草味 🌿" }
+        ];
+
+        let currentBeansLv = 'all';
         let historyData = [];
 
+        // タブ切り替え
+        function switchTab(tab) {
+            const rouletteView = document.getElementById('view-roulette');
+            const beansView = document.getElementById('view-beans');
+            const tabRoulette = document.getElementById('tab-roulette');
+            const tabBeans = document.getElementById('tab-beans');
+
+            if (tab === 'roulette') {
+                rouletteView.classList.remove('hidden');
+                beansView.classList.add('hidden');
+                tabRoulette.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all cinzel-font bg-amber-500 text-purple-950 shadow";
+                tabBeans.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all cinzel-font text-purple-300 hover:text-amber-300";
+            } else {
+                rouletteView.classList.add('hidden');
+                beansView.classList.remove('hidden');
+                tabBeans.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all cinzel-font bg-purple-700 text-amber-300 shadow border border-purple-500";
+                tabRoulette.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all cinzel-font text-purple-300 hover:text-amber-300";
+                renderBeansGrid();
+            }
+        }
+
+        // ビーンズのレベル選択
+        function selectBeansLevel(lv) {
+            currentBeansLv = lv;
+            ['all', '1', '2', '3'].forEach(l => {
+                const btn = document.getElementById(`btn-lv-${l}`);
+                if (l === lv) {
+                    btn.className = "py-2 px-1 text-[11px] font-bold rounded-lg bg-amber-500 text-purple-950 transition-all cinzel-font shadow";
+                } else {
+                    btn.className = "py-2 px-1 text-[11px] font-bold rounded-lg bg-purple-900/80 text-purple-200 border border-purple-600 transition-all cinzel-font";
+                }
+            });
+            renderBeansGrid();
+        }
+
+        // ビーンズ一覧の描画
+        function renderBeansGrid() {
+            const grid = document.getElementById('beans-grid');
+            const filteredBeans = currentBeansLv === 'all' 
+                ? beansData 
+                : beansData.filter(b => b.lv.toString() === currentBeansLv);
+
+            grid.innerHTML = filteredBeans.map(b => `
+                <div id="beans-card-${b.id}" class="beans-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[60px]">
+                    <div class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+                        <span>${b.name}</span>
+                        <span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-900 text-purple-300 border border-purple-700">${b.lvName}</span>
+                    </div>
+                    <div class="text-[10px] text-purple-200 mt-1 truncate">${b.desc}</div>
+                </div>
+            `).join('');
+        }
+
+        // 履歴管理
         function addHistory(type, title, detail) {
             const now = new Date();
             const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -305,6 +431,7 @@
 
             container.innerHTML = historyData.map(item => {
                 let badgeColor = item.type === 'COIN' ? 'bg-amber-900/60 text-amber-300 border-amber-700' :
+                                 item.type === 'BEANS' ? 'bg-pink-950 text-pink-300 border-pink-700' :
                                  item.type === 'TRICK' ? 'bg-purple-900/60 text-purple-300 border-purple-700' :
                                  'bg-amber-950/85 text-amber-200 border-amber-800';
                 return `
@@ -357,7 +484,7 @@
             }, 1000);
         }
 
-        // ルーレット機能（6マス一覧連動版）
+        // ルーレット機能（TRICK / TREAT）
         function spinRoulette(type) {
             const items = type === 'trick' ? trickItems : treatItems;
             const btnEl = document.getElementById(`${type}-btn`);
@@ -401,6 +528,70 @@
                 }
             }, intervalTime);
         }
+
+        // 百味ビーンズ ルーレット機能
+        function spinBeansRoulette() {
+            const targetBeans = currentBeansLv === 'all' 
+                ? beansData 
+                : beansData.filter(b => b.lv.toString() === currentBeansLv);
+            
+            const btnEl = document.getElementById('beans-btn');
+            const resultDiv = document.getElementById('beans-result');
+            
+            if (targetBeans.length === 0) return;
+
+            btnEl.disabled = true;
+            resultDiv.innerHTML = '<span class="text-purple-300 animate-pulse">百味ビーンズがランダム選定中...🍬</span>';
+
+            targetBeans.forEach(b => {
+                const card = document.getElementById(`beans-card-${b.id}`);
+                if(card) card.classList.remove('active-highlight');
+            });
+
+            let counter = 0;
+            const maxCount = 15;
+            const intervalTime = 70;
+
+            const timer = setInterval(() => {
+                targetBeans.forEach(b => {
+                    const card = document.getElementById(`beans-card-${b.id}`);
+                    if(card) card.classList.remove('active-highlight');
+                });
+
+                const randomBean = targetBeans[Math.floor(Math.random() * targetBeans.length)];
+                const targetCard = document.getElementById(`beans-card-${randomBean.id}`);
+                if(targetCard) {
+                    targetCard.classList.add('active-highlight');
+                    targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+
+                counter++;
+
+                if (counter >= maxCount) {
+                    clearInterval(timer);
+                    const finalBean = targetBeans[Math.floor(Math.random() * targetBeans.length)];
+                    
+                    targetBeans.forEach(b => {
+                        const card = document.getElementById(`beans-card-${b.id}`);
+                        if(card) card.classList.remove('active-highlight');
+                    });
+                    const finalCard = document.getElementById(`beans-card-${finalBean.id}`);
+                    if(finalCard) {
+                        finalCard.classList.add('active-highlight');
+                        finalCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+
+                    resultDiv.innerHTML = `<span class="text-amber-400 font-black text-sm animate-bounce">🎯 当たり：[${finalBean.lvName}] ${finalBean.name}！</span>`;
+                    addHistory('BEANS', `${finalBean.lvName}: ${finalBean.name}`, finalBean.desc);
+                    btnEl.disabled = false;
+                }
+            }, intervalTime);
+        }
+
+        // 初期化
+        window.onload = () => {
+            renderBeansGrid();
+        };
     </script>
 </body>
 </html>
