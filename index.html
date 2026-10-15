@@ -26,7 +26,7 @@
             border: 2px solid rgba(234, 179, 8, 0.45);
             box-shadow: 0 0 30px rgba(88, 28, 135, 0.6), inset 0 0 15px rgba(234, 179, 8, 0.2);
         }
-        /* 確実に毎回発火するコイン回転アニメーション */
+        /* コイン回転アニメーション */
         @keyframes coinSpin {
             0% { transform: rotateY(0deg) scale(1); }
             50% { transform: rotateY(1080deg) scale(1.15); }
@@ -39,10 +39,10 @@
             transition: all 0.2s ease;
         }
         .menu-card.active-highlight {
-            transform: scale(1.03);
+            transform: scale(1.04);
             border-color: #f59e0b !important;
-            background: rgba(120, 53, 15, 0.6) !important;
-            box-shadow: 0 0 15px rgba(245, 158, 11, 0.7);
+            background: rgba(120, 53, 15, 0.8) !important;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.8);
         }
     </style>
 </head>
@@ -179,29 +179,56 @@
                         <span class="text-[9px] text-purple-400">No.${item.id}</span>
                     </div>
                     <div class="my-1">
-                        <div class="text-xs font-bold text-pink-100 truncate">①②③④⑤⑥"[item.name]</div>
-                        <div class="text-[10px] text-purple-300 truncate">①②③④⑤⑥"[item.desc]</div>
+                        <div class="text-xs font-bold text-pink-100 truncate">${item.name}</div>
+                        <div class="text-[10px] text-purple-300 truncate">${item.desc}</div>
                     </div>
                 </div>
-            `).replace(/①②③④⑤⑥"\[item\.id\]/g, item.id)
-              .replace(/①②③④⑤⑥"\[item\.name\]/g, item.name)
-              .replace(/①②③④⑤⑥"\[item\.desc\]/g, item.desc);
+            `).join('').replace(/①②③④⑤⑥"\[item\.id\]/g, (match, offset, str) => {
+                // 正しくIDに置き換えるための安全な置換処理
+                return '';
+            });
+
+            // より確実なテンプレートリネーム処理
+            trickGrid.innerHTML = trickItems.map(item => `
+                <div id="trick-card-${item.id}" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between">
+                    <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
+                        <span>① ${item.name}</span>
+                        <span class="text-[9px] text-purple-400">No.${item.id}</span>
+                    </div>
+                    <div class="my-1">
+                        <div class="text-xs font-bold text-pink-100 truncate">${item.name}</div>
+                        <div class="text-[10px] text-purple-300 truncate">${item.desc}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // ID部分の修正を含めた正しいグリッド生成
+            trickGrid.innerHTML = trickItems.map(item => `
+                <div id="trick-card-${item.id}" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                    <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
+                        <span>(${item.id}) TRICK</span>
+                        <span class="text-[9px] text-purple-400">No.${item.id}</span>
+                    </div>
+                    <div class="my-0.5">
+                        <div class="text-xs font-bold text-pink-100 truncate">${item.name}</div>
+                        <div class="text-[10px] text-purple-300 truncate">${item.desc}</div>
+                    </div>
+                </div>
+            `).join('');
 
             const treatGrid = document.getElementById('treat-grid');
             treatGrid.innerHTML = treatItems.map(item => `
-                <div id="treat-card-${item.id}" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between">
+                <div id="treat-card-${item.id}" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
                     <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
-                        <span>①②③④⑤⑥"[item.id]</span>
+                        <span>(${item.id}) TREAT</span>
                         <span class="text-[9px] text-amber-400">No.${item.id}</span>
                     </div>
-                    <div class="my-1">
-                        <div class="text-xs font-bold text-amber-100 truncate">①②③④⑤⑥"[item.name]</div>
-                        <div class="text-[10px] text-amber-200/80 truncate">①②③④⑤⑥"[item.desc]</div>
+                    <div class="my-0.5">
+                        <div class="text-xs font-bold text-amber-100 truncate">${item.name}</div>
+                        <div class="text-[10px] text-amber-200/80 truncate">${item.desc}</div>
                     </div>
                 </div>
-            `).replace(/①②③④⑤⑥"\[item\.id\]/g, item.id)
-              .replace(/①②③④⑤⑥"\[item\.name\]/g, item.name)
-              .replace(/①②③④⑤⑥"\[item\.desc\]/g, item.desc);
+            `).join('');
         }
 
         function addHistory(type, title, detail) {
@@ -244,7 +271,7 @@
             renderHistory();
         }
 
-        // 確実なコイントスアニメーション（リフロー保証版）
+        // コイントスアニメーション
         function tossCoin() {
             const coin = document.getElementById('coin');
             const btn = document.getElementById('coin-btn');
@@ -254,7 +281,7 @@
             resultDiv.innerHTML = '<span class="text-purple-300 animate-pulse">運命のコインが回転中...</span>';
             
             coin.classList.remove('animate-spin-coin');
-            void coin.offsetWidth; // 強制リフロー
+            void coin.offsetWidth; 
 
             requestAnimationFrame(() => {
                 coin.classList.add('animate-spin-coin');
@@ -281,24 +308,21 @@
             
             btnEl.disabled = true;
 
-            // 全カードのハイライトをいったん消す
             items.forEach(item => {
                 const card = document.getElementById(`${type}-card-${item.id}`);
                 if(card) card.classList.remove('active-highlight');
             });
 
             let counter = 0;
-            const maxCount = 14; // ルーレットが切り替わる回数
+            const maxCount = 14; 
             const intervalTime = 70;
 
             const timer = setInterval(() => {
-                // 前回光っていたカードを消す
                 items.forEach(item => {
                     const card = document.getElementById(`${type}-card-${item.id}`);
                     if(card) card.classList.remove('active-highlight');
                 });
 
-                // ランダムに1つ選んで光らせる
                 const randomItem = items[Math.floor(Math.random() * items.length)];
                 const targetCard = document.getElementById(`${type}-card-${randomItem.id}`);
                 if(targetCard) targetCard.classList.add('active-highlight');
@@ -307,10 +331,8 @@
 
                 if (counter >= maxCount) {
                     clearInterval(timer);
-                    // 最終決定
                     const finalItem = items[Math.floor(Math.random() * items.length)];
                     
-                    // 全消ししてから最終決定カードを強力にハイライト
                     items.forEach(item => {
                         const card = document.getElementById(`${type}-card-${item.id}`);
                         if(card) card.classList.remove('active-highlight');
