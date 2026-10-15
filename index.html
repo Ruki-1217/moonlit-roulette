@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moonlit Candy Atelier - 運命の6マスをチェック！</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Zen Maru Gothic', sans-serif;
+            background-color: #120524;
+            color: #fce7f3;
+        }
+        .cinzel-font {
+            font-family: 'Cinzel', serif;
+        }
+        .glow-gold {
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.6), 0 0 20px rgba(251, 191, 36, 0.4);
+        }
+        .glow-purple {
+            text-shadow: 0 0 15px rgba(168, 85, 247, 0.8);
+        }
+        .glass-panel {
+            background: rgba(30, 10, 50, 0.75);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(234, 179, 8, 0.4);
+            box-shadow: 0 0 25px rgba(88, 28, 135, 0.5), inset 0 0 15px rgba(234, 179, 8, 0.2);
+        }
+        .coin {
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+        .coin.flip-anim {
+            transform: rotateY(1800deg) scale(1.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-950 via-[#170833] to-[#0a0214] py-8 px-4 flex flex-col items-center">
+
+    <div class="max-w-md w-full mx-auto space-y-6">
+        
+        <!-- ヘッダータイトル -->
+        <header class="text-center space-y-2">
+            <p class="text-xs cinzel-font tracking-widest text-amber-300">KAMUKURA REI HALLOWEEN SPECIAL</p>
+            <h1 class="cinzel-font text-3xl md:text-4xl font-black text-amber-400 glow-gold tracking-wider">
+                Moonlit Candy Atelier
+            </h1>
+            <p class="text-xs text-purple-300 tracking-wider">🌙 月夜の魔法菓子店 ── ROULETTE MENU</p>
+        </header>
+
+        <!-- 【1】コイントスセクション -->
+        <section class="glass-panel rounded-2xl p-5 text-center relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-24 h-24 bg-purple-600/20 rounded-full blur-xl"></div>
+            
+            <h2 class="cinzel-font text-lg font-bold text-amber-300 mb-3 flex items-center justify-center gap-2">
+                <span>🪙</span> COIN TOSS <span>🪙</span>
+            </h2>
+            <p class="text-xs text-purple-200 mb-4">コインを投げて、運命のルートを決めよう！</p>
+
+            <!-- コイン表示部 -->
+            <div class="flex justify-center mb-4">
+                <div id="coin" class="coin w-24 h-24 rounded-full bg-gradient-to-br from-amber-300 via-yellow-500 to-amber-700 p-1 shadow-lg shadow-amber-500/30 flex items-center justify-center border-2 border-amber-200">
+                    <div class="w-full h-full rounded-full border border-amber-900/40 flex flex-col items-center justify-center bg-gradient-to-tr from-amber-500 to-yellow-300 text-purple-950 font-black cinzel-font text-sm shadow-inner">
+                        <span id="coin-text" class="text-xs tracking-tighter">TRICK</span>
+                        <span class="text-[10px] opacity-75">or</span>
+                        <span id="coin-subtext" class="text-xs tracking-tighter">TREAT</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- トスボタン -->
+            <button onclick="tossCoin()" id="coin-btn" class="w-full py-3 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-purple-950 font-black rounded-xl shadow-lg hover:brightness-110 active:scale-95 transition-all cinzel-font tracking-wider text-sm border border-amber-200/50">
+                COIN TOSS START
+            </button>
+            <div id="coin-result" class="mt-3 text-sm font-bold text-amber-300 h-6"></div>
+        </section>
+
+        <!-- 【2】ルーレットセクション（TRICK & TREAT個別） -->
+        <section class="glass-panel rounded-2xl p-5 space-y-5">
+            <h2 class="cinzel-font text-lg font-bold text-amber-300 text-center flex items-center justify-center gap-2">
+                <span>🔮</span> DESTINY ROULETTE <span>🔮</span>
+            </h2>
+
+            <!-- TRICKルーレットエリア -->
+            <div class="bg-purple-950/60 rounded-xl p-4 border border-purple-800/60 relative">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="cinzel-font font-bold text-purple-300 flex items-center gap-1">
+                        <span>👻</span> TRICK (全6種)
+                    </h3>
+                    <span class="text-[10px] bg-purple-900/80 text-purple-200 px-2 py-0.5 rounded-full border border-purple-700">自動/個別</span>
+                </div>
+                <div id="trick-display" class="bg-purple-900/40 rounded-lg p-3 text-center border border-purple-700/50 min-h-[70px] flex flex-col items-center justify-center mb-3">
+                    <span class="text-xs text-purple-300">ボタンを押してルーレットを回そう</span>
+                </div>
+                <button onclick="spinRoulette('trick')" id="trick-btn" class="w-full py-2 bg-gradient-to-r from-purple-700 to-purple-900 text-purple-100 font-bold rounded-lg shadow hover:brightness-110 active:scale-95 transition-all text-xs cinzel-font tracking-wider border border-purple-500/40">
+                    TRICK ルーレット START
+                </button>
+            </div>
+
+            <!-- TREATルーレットエリア -->
+            <div class="bg-amber-950/40 rounded-xl p-4 border border-amber-800/60 relative">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="cinzel-font font-bold text-amber-300 flex items-center gap-1">
+                        <span>🍬</span> TREAT (全6種)
+                    </h3>
+                    <span class="text-[10px] bg-amber-900/80 text-amber-200 px-2 py-0.5 rounded-full border border-amber-700">自動/個別</span>
+                </div>
+                <div id="treat-display" class="bg-amber-900/40 rounded-lg p-3 text-center border border-amber-700/50 min-h-[70px] flex flex-col items-center justify-center mb-3">
+                    <span class="text-xs text-amber-200">ボタンを押してルーレットを回そう</span>
+                </div>
+                <button onclick="spinRoulette('treat')" id="treat-btn" class="w-full py-2 bg-gradient-to-r from-amber-700 to-amber-900 text-amber-100 font-bold rounded-lg shadow hover:brightness-110 active:scale-95 transition-all text-xs cinzel-font tracking-wider border border-amber-500/40">
+                    TREAT ルーレット START
+                </button>
+            </div>
+        </section>
+
+        <!-- 【3】結果履歴セクション -->
+        <section class="glass-panel rounded-2xl p-5">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="cinzel-font text-sm font-bold text-amber-300 flex items-center gap-1.5">
+                    <span>📜</span> RESULT HISTORY
+                </h3>
+                <button onclick="clearHistory()" class="text-[10px] text-purple-300 hover:text-amber-300 underline transition-colors">
+                    履歴をクリア
+                </button>
+            </div>
+            <div id="history-list" class="space-y-2 max-h-48 overflow-y-auto pr-1 text-xs">
+                <div class="text-center text-purple-400/70 py-4 italic text-[11px]">
+                    まだ結果の履歴はありません
+                </div>
+            </div>
+        </section>
+
+        <!-- フッター特記事項 -->
+        <footer class="text-center text-[10px] text-purple-400 space-y-1 pb-4">
+            <p>1000Cで好きな番号を指定できるよ！</p>
+            <p class="cinzel-font text-purple-500">KAMUKURA REI / REALITY</p>
+        </footer>
+
+    </div>
+
+    <!-- JavaScript ロジック -->
+    <script>
+        // TRICK / TREAT のメニューデータ定義
+        const trickItems = [
+            { id: 1, name: "小悪魔のいたずら", desc: "Lv.1のビーンズ1粒 😈" },
+            { id: 2, name: "魔女の気まぐれ", desc: "Lv.2のビーンズ1粒 🔮" },
+            { id: 3, name: "禁断の一粒", desc: "Lv.3のビーンズ1粒 👑" },
+            { id: 4, name: "リスナーの悪だくみ", desc: "Lv.1～3を指定 ❓" },
+            { id: 5, name: "いたずら回避！", desc: "チョコ1個 🍫" },
+            { id: 6, name: "運命の一粒", desc: "全レベルからランダム 🎁" }
+        ];
+
+        const treatItems = [
+            { id: 1, name: "チョコ", desc: "チョコ1個 🍫" },
+            { id: 2, name: "神座と乾杯！", desc: "乾杯タイム 🥂" },
+            { id: 3, name: "差し入れギフト", desc: "食べ物系ギフト(任意) 🎁" },
+            { id: 4, name: "おつまみ", desc: "おつまみひと口 🧀" },
+            { id: 5, name: "神座と乾杯！", desc: "乾杯タイム 🥂" },
+            { id: 6, name: "ご褒美セレクト", desc: "チョコ or おつまみ 🤎" }
+        ];
+
+        let historyData = [];
+
+        // 履歴を追加する関数
+        function addHistory(type, title, detail) {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            
+            historyData.unshift({ type, title, detail, timeStr });
+            if (historyData.length > 15) historyData.pop(); // 最大15件まで保持
+            
+            renderHistory();
+        }
+
+        // 履歴を画面に描画
+        function renderHistory() {
+            const container = document.getElementById('history-list');
+            if (historyData.length === 0) {
+                container.innerHTML = '<div class="text-center text-purple-400/70 py-4 italic text-[11px]">まだ結果の履歴はありません</div>';
+                return;
+            }
+
+            container.innerHTML = historyData.map(item => {
+                let badgeColor = item.type === 'COIN' ? 'bg-amber-900/60 text-amber-300 border-amber-700' :
+                                 item.type === 'TRICK' ? 'bg-purple-900/60 text-purple-300 border-purple-700' :
+                                 'bg-amber-950/85 text-amber-200 border-amber-800';
+                return `
+                    <div class="bg-purple-900/20 border border-purple-800/40 rounded-lg p-2 flex items-center justify-between gap-2 animate-fadeIn">
+                        <div class="flex items-center gap-2 overflow-hidden">
+                            <span class="text-[9px] px-1.5 py-0.5 rounded border ${badgeColor} font-bold shrink-0">${item.type}</span>
+                            <div class="truncate">
+                                <span class="font-bold text-pink-100">${item.title}</span>
+                                <span class="text-[10px] text-purple-300 ml-1">(${item.detail})</span>
+                            </div>
+                        </div>
+                        <span class="text-[9px] text-purple-400 shrink-0">${item.timeStr}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function clearHistory() {
+            historyData = [];
+            renderHistory();
+        }
+
+        // 1. コイントス機能
+        function tossCoin() {
+            const coin = document.getElementById('coin');
+            const btn = document.getElementById('coin-btn');
+            const resultDiv = document.getElementById('coin-result');
+            
+            btn.disabled = true;
+            resultDiv.innerHTML = '<span class="text-purple-300 animate-pulse">運命のコインが回転中...</span>';
+            
+            coin.classList.remove('flip-anim');
+            void coin.offsetWidth; // reflow trigger
+            coin.classList.add('flip-anim');
+
+            setTimeout(() => {
+                const isTrick = Math.random() < 0.5;
+                const resultText = isTrick ? "TRICK" : "TREAT";
+                
+                document.getElementById('coin-text').innerText = isTrick ? "TRICK" : "TREAT";
+                document.getElementById('coin-subtext').innerText = isTrick ? "✦" : "✦";
+                
+                resultDiv.innerHTML = `<span class="text-amber-400 font-black text-base animate-bounce">✨ 結果：${resultText}ルート！ ✨</span>`;
+                
+                addHistory('COIN', `コイントス`, `${resultText}が出ました`);
+                btn.disabled = false;
+            }, 800);
+        }
+
+        // 2. ルーレット機能（TRICK / TREAT個別）
+        function spinRoulette(type) {
+            const items = type === 'trick' ? trickItems : treatItems;
+            const displayEl = document.getElementById(`${type}-display`);
+            const btnEl = document.getElementById(`${type}-btn`);
+            
+            btnEl.disabled = true;
+            displayEl.innerHTML = '<span class="text-purple-300 animate-pulse text-xs">運命のマスを選定中...🔮</span>';
+
+            let counter = 0;
+            const maxCount = 12; // 演出用切り替え回数
+            const intervalTime = 80;
+
+            const timer = setInterval(() => {
+                const randomItem = items[Math.floor(Math.random() * items.length)];
+                displayEl.innerHTML = `
+                    <div class="text-[11px] text-purple-300">抽選中...</div>
+                    <div class="text-sm font-bold text-amber-200">【${randomItem.id}】${randomItem.name}</div>
+                `;
+                counter++;
+
+                if (counter >= maxCount) {
+                    clearInterval(timer);
+                    // 最終結果の決定
+                    const finalItem = items[Math.floor(Math.random() * items.length)];
+                    displayEl.innerHTML = `
+                        <div class="text-[10px] text-amber-300 uppercase tracking-widest font-bold">🎯 決定！</div>
+                        <div class="text-base font-black text-amber-300 mt-0.5">【${finalItem.id}】${finalItem.name}</div>
+                        <div class="text-[11px] text-purple-200 mt-0.5">${finalItem.desc}</div>
+                    `;
+                    
+                    addHistory(type.toUpperCase(), `【${finalItem.id}】${finalItem.name}`, finalItem.desc);
+                    btnEl.disabled = false;
+                }
+            }, intervalTime);
+        }
+    </script>
+</body>
+</html>
