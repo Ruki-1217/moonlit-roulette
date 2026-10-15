@@ -41,8 +41,8 @@
         .menu-card.active-highlight {
             transform: scale(1.04);
             border-color: #f59e0b !important;
-            background: rgba(120, 53, 15, 0.8) !important;
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.8);
+            background: rgba(120, 53, 15, 0.85) !important;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.85);
         }
     </style>
 </head>
@@ -93,9 +93,68 @@
                 <span class="text-[10px] bg-purple-900/80 text-purple-200 px-2 py-0.5 rounded-full border border-purple-700">全6種</span>
             </div>
 
-            <!-- 6マス一覧グリッド -->
-            <div class="grid grid-cols-2 gap-2" id="trick-grid">
-                <!-- JSで動的生成 -->
+            <!-- 6マス一覧グリッド（静的配置） -->
+            <div class="grid grid-cols-2 gap-2">
+                <div id="trick-card-1" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                    <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
+                        <span>①小悪魔のいたずら</span>
+                        <span class="text-[9px] text-purple-400">No.1</span>
+                    </div>
+                    <div class="my-0.5">
+                        <div class="text-xs font-bold text-pink-100 truncate">小悪魔のいたずら</div>
+                        <div class="text-[10px] text-purple-300 truncate">Lv.1のビーンズ1粒 😈</div>
+                    </div>
+                </div>
+                <div id="trick-card-2" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                    <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
+                        <span>②魔女の気まぐれ</span>
+                        <span class="text-[9px] text-purple-400">No.2</span>
+                    </div>
+                    <div class="my-0.5">
+                        <div class="text-xs font-bold text-pink-100 truncate">魔女の気まぐれ</div>
+                        <div class="text-[10px] text-purple-300 truncate">Lv.2のビーンズ1粒 🔮</div>
+                    </div>
+                </div>
+                <div id="trick-card-3" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                    <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
+                        <span>③禁断の一粒</span>
+                        <span class="text-[9px] text-purple-400">No.3</span>
+                    </div>
+                    <div class="my-0.5">
+                        <div class="text-xs font-bold text-pink-100 truncate">禁断の一粒</div>
+                        <div class="text-[10px] text-purple-300 truncate">Lv.3のビーンズ1粒 👑</div>
+                    </div>
+                </div>
+                <div id="trick-card-4" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                    <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
+                        <span>④リスナーの悪だくみ</span>
+                        <span class="text-[9px] text-purple-400">No.4</span>
+                    </div>
+                    <div class="my-0.5">
+                        <div class="text-xs font-bold text-pink-100 truncate">リスナーの悪だくみ</div>
+                        <div class="text-[10px] text-purple-300 truncate">Lv.1～3を指定 ❓</div>
+                    </div>
+                </div>
+                <div id="trick-card-5" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                    <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
+                        <span>⑤いたずら回避！</span>
+                        <span class="text-[9px] text-purple-400">No.5</span>
+                    </div>
+                    <div class="my-0.5">
+                        <div class="text-xs font-bold text-pink-100 truncate">いたずら回避！</div>
+                        <div class="text-[10px] text-purple-300 truncate">チョコ1個 🍫</div>
+                    </div>
+                </div>
+                <div id="trick-card-6" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                    <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
+                        <span>⑥運命の一粒</span>
+                        <span class="text-[9px] text-purple-400">No.6</span>
+                    </div>
+                    <div class="my-0.5">
+                        <div class="text-xs font-bold text-pink-100 truncate">運命の一粒</div>
+                        <div class="text-[10px] text-purple-300 truncate">全レベルからランダム 🎁</div>
+                    </div>
+                </div>
             </div>
 
             <button onclick="spinRoulette('trick')" id="trick-btn" class="w-full py-2.5 bg-gradient-to-r from-purple-700 via-purple-800 to-purple-950 text-purple-100 font-bold rounded-xl shadow hover:brightness-110 active:scale-95 transition-all text-xs cinzel-font tracking-wider border border-purple-500/50">
@@ -112,9 +171,68 @@
                 <span class="text-[10px] bg-amber-900/80 text-amber-200 px-2 py-0.5 rounded-full border border-amber-700">全6種</span>
             </div>
 
-            <!-- 6マス一覧グリッド -->
-            <div class="grid grid-cols-2 gap-2" id="treat-grid">
-                <!-- JSで動的生成 -->
+            <!-- 6マス一覧グリッド（静的配置） -->
+            <div class="grid grid-cols-2 gap-2">
+                <div id="treat-card-1" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                    <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                        <span>①チョコ</span>
+                        <span class="text-[9px] text-amber-400">No.1</span>
+                    </div>
+                    <div class="my-0.5">
+                        <div class="text-xs font-bold text-amber-100 truncate">チョコ</div>
+                        <div class="text-[10px] text-amber-200/80 truncate">チョコ1個 🍫</div>
+                    </div>
+                </div>
+                <div id="treat-card-2" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                    <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                        <span>②神座と乾杯！</span>
+                        <span class="text-[9px] text-amber-400">No.2</span>
+                    </div>
+                    <div class="my-0.5">
+                        <div class="text-xs font-bold text-amber-100 truncate">神座と乾杯！</div>
+                        <div class="text-[10px] text-amber-200/80 truncate">乾杯タイム 🥂</div>
+                    </div>
+                </div>
+                <div id="treat-card-3" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                    <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                        <span>③差し入れギフト</span>
+                        <span class="text-[9px] text-amber-400">No.3</span>
+                    </div>
+                    <div class="my-0.5">
+                        <div class="text-xs font-bold text-amber-100 truncate">差し入れギフト</div>
+                        <div class="text-[10px] text-amber-200/80 truncate">食べ物系ギフト(任意) 🎁</div>
+                    </div>
+                </div>
+                <div id="treat-card-4" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                    <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                        <span>④おつまみ</span>
+                        <span class="text-[9px] text-amber-400">No.4</span>
+                    </div>
+                    <div class="my-0.5">
+                        <div class="text-xs font-bold text-amber-100 truncate">おつまみ</div>
+                        <div class="text-[10px] text-amber-200/80 truncate">おつまみひと口 🧀</div>
+                    </div>
+                </div>
+                <div id="treat-card-5" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                    <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                        <span>⑤神座と乾杯！</span>
+                        <span class="text-[9px] text-amber-400">No.5</span>
+                    </div>
+                    <div class="my-0.5">
+                        <div class="text-xs font-bold text-amber-100 truncate">神座と乾杯！</div>
+                        <div class="text-[10px] text-amber-200/80 truncate">乾杯タイム 🥂</div>
+                    </div>
+                </div>
+                <div id="treat-card-6" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
+                    <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                        <span>⑥ご褒美セレクト</span>
+                        <span class="text-[9px] text-amber-400">No.6</span>
+                    </div>
+                    <div class="my-0.5">
+                        <div class="text-xs font-bold text-amber-100 truncate">ご褒美セレクト</div>
+                        <div class="text-[10px] text-amber-200/80 truncate">チョコ or おつまみ 🤎</div>
+                    </div>
+                </div>
             </div>
 
             <button onclick="spinRoulette('treat')" id="treat-btn" class="w-full py-2.5 bg-gradient-to-r from-amber-700 via-amber-800 to-amber-950 text-amber-100 font-bold rounded-xl shadow hover:brightness-110 active:scale-95 transition-all text-xs cinzel-font tracking-wider border border-amber-500/50">
@@ -168,68 +286,6 @@
         ];
 
         let historyData = [];
-
-        // 初期描画：6マス一覧を生成
-        function renderGrids() {
-            const trickGrid = document.getElementById('trick-grid');
-            trickGrid.innerHTML = trickItems.map(item => `
-                <div id="trick-card-${item.id}" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between">
-                    <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
-                        <span>①②③④⑤⑥"[item.id]</span>
-                        <span class="text-[9px] text-purple-400">No.${item.id}</span>
-                    </div>
-                    <div class="my-1">
-                        <div class="text-xs font-bold text-pink-100 truncate">${item.name}</div>
-                        <div class="text-[10px] text-purple-300 truncate">${item.desc}</div>
-                    </div>
-                </div>
-            `).join('').replace(/①②③④⑤⑥"\[item\.id\]/g, (match, offset, str) => {
-                // 正しくIDに置き換えるための安全な置換処理
-                return '';
-            });
-
-            // より確実なテンプレートリネーム処理
-            trickGrid.innerHTML = trickItems.map(item => `
-                <div id="trick-card-${item.id}" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between">
-                    <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
-                        <span>① ${item.name}</span>
-                        <span class="text-[9px] text-purple-400">No.${item.id}</span>
-                    </div>
-                    <div class="my-1">
-                        <div class="text-xs font-bold text-pink-100 truncate">${item.name}</div>
-                        <div class="text-[10px] text-purple-300 truncate">${item.desc}</div>
-                    </div>
-                </div>
-            `).join('');
-
-            // ID部分の修正を含めた正しいグリッド生成
-            trickGrid.innerHTML = trickItems.map(item => `
-                <div id="trick-card-${item.id}" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                    <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
-                        <span>(${item.id}) TRICK</span>
-                        <span class="text-[9px] text-purple-400">No.${item.id}</span>
-                    </div>
-                    <div class="my-0.5">
-                        <div class="text-xs font-bold text-pink-100 truncate">${item.name}</div>
-                        <div class="text-[10px] text-purple-300 truncate">${item.desc}</div>
-                    </div>
-                </div>
-            `).join('');
-
-            const treatGrid = document.getElementById('treat-grid');
-            treatGrid.innerHTML = treatItems.map(item => `
-                <div id="treat-card-${item.id}" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                    <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
-                        <span>(${item.id}) TREAT</span>
-                        <span class="text-[9px] text-amber-400">No.${item.id}</span>
-                    </div>
-                    <div class="my-0.5">
-                        <div class="text-xs font-bold text-amber-100 truncate">${item.name}</div>
-                        <div class="text-[10px] text-amber-200/80 truncate">${item.desc}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
 
         function addHistory(type, title, detail) {
             const now = new Date();
@@ -345,11 +401,6 @@
                 }
             }, intervalTime);
         }
-
-        // ページ読み込み時にグリッドを生成
-        window.onload = () => {
-            renderGrids();
-        };
     </script>
 </body>
 </html>
