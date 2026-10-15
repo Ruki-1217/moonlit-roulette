@@ -268,7 +268,7 @@
                     <button onclick="selectBeansLevel('3')" id="btn-lv-3" class="py-2 px-1 text-[11px] font-bold rounded-lg bg-purple-900/80 text-purple-200 border border-purple-600 transition-all cinzel-font">Lv.3</button>
                 </div>
 
-                <!-- ビーンズ一覧コンテナ（全Lv時はスクロールなしで全表示、個別Lv時はスクロール表示） -->
+                <!-- ビーンズ一覧コンテナ -->
                 <div id="beans-container" class="mb-4">
                     <!-- JSで動的生成 -->
                 </div>
@@ -387,12 +387,11 @@
             renderBeansGrid();
         }
 
-        // ビーンズ一覧の描画（全Lv時はスクロールなしで全表示、個別Lv時はスクロール表示）
+        // ビーンズ一覧の描画（全Lv時はスクロールなし、個別Lv時はスクロールあり）
         function renderBeansGrid() {
             const container = document.getElementById('beans-container');
 
             if (currentBeansLv === 'all') {
-                // 全Lv時：スクロールなし、セクションごとに見出し付きで全表示
                 const lv1Items = beansData.filter(b => b.lv === 1);
                 const lv2Items = beansData.filter(b => b.lv === 2);
                 const lv3Items = beansData.filter(b => b.lv === 3);
@@ -423,14 +422,10 @@
                         </div>
                     </div>
                 `;
-                // 全表示時は高制限を解除
-                container.style.maxHeight = 'none';
-                container.style.overflowY = 'visible';
             } else {
-                // 個別Lv選択時：スクロールありのグリッド表示
                 const filteredBeans = beansData.filter(b => b.lv.toString() === currentBeansLv);
                 container.innerHTML = `
-                    <div id="beans-grid" class="grid grid-cols-2 gap-2 text-left max-h-72 overflow-y-auto pr-1">
+                    <div class="grid grid-cols-2 gap-2 text-left max-h-72 overflow-y-auto pr-1">
                         ${filteredBeans.map(b => `
                             <div id="beans-card-${b.id}" class="beans-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[60px]">
                                 <div class="flex items-center justify-between text-[10px] font-bold text-amber-300">
