@@ -605,7 +605,7 @@
                         finalCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     }
 
-                    resultDiv.innerHTML = `<span class="text-amber-400 font-black text-sm animate-bounce">🎯 当たり：[${finalBean.lvName}] ${finalBean.name}！</span>`;
+                    resultDiv.innerHTML = `<span class="text-amber-400 font-black text-sm animate-bounce">🎯 結果：[${finalBean.lvName}] ${finalBean.name}！</span>`;
                     addHistory('BEANS', `${finalBean.lvName}: ${finalBean.name}`, finalBean.desc);
                     btnEl.disabled = false;
                 }
