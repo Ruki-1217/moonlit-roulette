@@ -109,11 +109,11 @@
                 <div id="coin-result" class="mt-2 text-xs font-bold text-amber-300 h-5"></div>
             </section>
 
-            <!-- TRICK ドラム抽選 -->
+            <!-- TRICK 抽選 -->
             <section class="glass-panel rounded-2xl p-4 space-y-3 border-purple-600/50 text-center">
                 <div class="flex items-center justify-between">
                     <h3 class="cinzel-font text-xs font-bold text-purple-300 flex items-center gap-1.5">
-                        <span>👻</span> TRICK ドラム抽選 (全6種)
+                        <span>👻</span> TRICK 抽選 (全6種)
                     </h3>
                     <span id="trick-status" class="text-[9px] bg-purple-900/80 text-purple-200 px-2 py-0.5 rounded-full border border-purple-700">待機中</span>
                 </div>
@@ -122,12 +122,12 @@
                     <div class="absolute inset-x-0 top-0 h-4 bg-gradient-to-b from-black/60 to-transparent pointer-events-none z-10"></div>
                     <div class="absolute inset-x-0 bottom-0 h-4 bg-gradient-to-t from-black/60 to-transparent pointer-events-none z-10"></div>
                     <div id="slot-trick" class="text-purple-200 text-xs">
-                        ボタンを押してドラムを回そう！
+                        ボタンを押して抽選START！
                     </div>
                 </div>
 
                 <button onclick="spinMenuDrum('trick')" id="trick-btn" class="w-full py-2.5 bg-gradient-to-r from-purple-700 via-purple-800 to-purple-950 text-purple-100 font-bold rounded-xl shadow hover:brightness-110 active:scale-95 transition-all text-xs cinzel-font tracking-wider border border-purple-500/50">
-                    👻 TRICK ドラム START
+                    👻 TRICK 抽選 START
                 </button>
             </section>
 
@@ -135,7 +135,7 @@
             <section class="glass-panel rounded-2xl p-4 space-y-3 border-amber-600/50 text-center">
                 <div class="flex items-center justify-between">
                     <h3 class="cinzel-font text-xs font-bold text-amber-300 flex items-center gap-1.5">
-                        <span>🍬</span> TREAT ドラム抽選 (全6種)
+                        <span>🍬</span> TREAT 抽選 (全6種)
                     </h3>
                     <span id="treat-status" class="text-[9px] bg-amber-900/80 text-amber-200 px-2 py-0.5 rounded-full border border-amber-700">待機中</span>
                 </div>
@@ -144,12 +144,12 @@
                     <div class="absolute inset-x-0 top-0 h-4 bg-gradient-to-b from-black/60 to-transparent pointer-events-none z-10"></div>
                     <div class="absolute inset-x-0 bottom-0 h-4 bg-gradient-to-t from-black/60 to-transparent pointer-events-none z-10"></div>
                     <div id="slot-treat" class="text-amber-200/80 text-xs">
-                        ボタンを押してドラムを回そう！
+                        ボタンを押して抽選START！
                     </div>
                 </div>
 
                 <button onclick="spinMenuDrum('treat')" id="treat-btn" class="w-full py-2.5 bg-gradient-to-r from-amber-700 via-amber-800 to-amber-950 text-amber-100 font-bold rounded-xl shadow hover:brightness-110 active:scale-95 transition-all text-xs cinzel-font tracking-wider border border-amber-500/50">
-                    🍬 TREAT ドラム START
+                    🍬 TREAT 抽選 START
                 </button>
             </section>
 
@@ -162,7 +162,7 @@
                 <h2 class="cinzel-font text-sm font-bold text-amber-300 mb-1 flex items-center justify-center gap-2">
                     <span>🍬</span> BEANS DRUM GUIDE <span>🍬</span>
                 </h2>
-                <p class="text-[10px] text-purple-200 mb-2">百味ビーンズ 難易度別ドラム抽選！</p>
+                <p class="text-[10px] text-purple-200 mb-2">百味ビーンズ Level別抽選！</p>
 
                 <div class="grid grid-cols-4 gap-1 mb-2">
                     <button onclick="selectBeansLevel('all')" id="btn-lv-all" class="py-1.5 px-1 text-[10px] font-bold rounded-lg bg-amber-500 text-purple-950 transition-all cinzel-font shadow">全Lv</button>
@@ -175,12 +175,12 @@
                     <div class="absolute inset-x-0 top-0 h-4 bg-gradient-to-b from-black/60 to-transparent pointer-events-none z-10"></div>
                     <div class="absolute inset-x-0 bottom-0 h-4 bg-gradient-to-t from-black/60 to-transparent pointer-events-none z-10"></div>
                     <div id="slot-beans" class="text-purple-300 text-xs px-2">
-                        難易度を選んでドラムを回そう！
+                        Levelを選んで抽選START！
                     </div>
                 </div>
 
                 <button onclick="spinBeansDrum()" id="beans-btn" class="w-full py-3 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-purple-950 font-black rounded-xl shadow-lg hover:brightness-110 active:scale-95 transition-all cinzel-font tracking-wider text-xs border border-amber-200">
-                    BEANS ドラム START 🎲
+                    BEANS 抽選 START 🎲
                 </button>
             </section>
 
