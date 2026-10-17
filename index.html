@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moonlit Candy Atelier - 運命の6マス＆百味ビーンズガイド</title>
+    <title>Moonlit Candy Atelier - ドラム抽選機能付き</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- Google Fonts -->
@@ -35,271 +35,181 @@
         .animate-spin-coin {
             animation: coinSpin 1s cubic-bezier(0.15, 0.85, 0.35, 1.2) forwards;
         }
-        .menu-card, .beans-card {
-            transition: all 0.2s ease;
+        /* ドラム抽選スロット窓のスタイル */
+        .slot-window {
+            background: linear-gradient(to bottom, #11031d, #240a3f, #11031d);
+            border: 3px solid #f59e0b;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8), 0 0 15px rgba(245, 158, 11, 0.4);
+            overflow: hidden;
+            position: relative;
         }
-        .menu-card.active-highlight, .beans-card.active-highlight {
-            transform: scale(1.04);
-            border-color: #f59e0b !important;
-            background: rgba(120, 53, 15, 0.85) !important;
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.85);
+        .slot-item {
+            height: 64px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.1s ease;
+        }
+        @keyframes resultPop {
+            0% { transform: scale(0.9); filter: brightness(1); }
+            50% { transform: scale(1.08); filter: brightness(1.3); }
+            100% { transform: scale(1); filter: brightness(1); }
+        }
+        .animate-result {
+            animation: resultPop 0.5s ease-out;
         }
     </style>
 </head>
-<body class="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-950 via-[#170833] to-[#0a0214] py-8 px-4 flex flex-col items-center">
+<body class="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-950 via-[#170833] to-[#0a0214] py-6 px-4 flex flex-col items-center">
 
-    <div class="max-w-md w-full mx-auto space-y-6">
+    <div class="max-w-md w-full mx-auto space-y-5">
         
         <!-- ヘッダータイトル -->
         <header class="text-center space-y-1">
-            <p class="text-[11px] cinzel-font tracking-widest text-amber-300">KAMUKURA REI HALLOWEEN SPECIAL</p>
+            <p class="text-[10px] cinzel-font tracking-widest text-amber-300">KAMUKURA REI HALLOWEEN SPECIAL</p>
             <h1 class="cinzel-font text-2xl md:text-3xl font-black text-amber-400 glow-gold tracking-wider">
                 Moonlit Candy Atelier
             </h1>
-            <p class="text-[11px] text-purple-300 tracking-wider">🌙 月夜の魔法菓子店 ── ROULETTE & BEANS</p>
+            <p class="text-[10px] text-purple-300 tracking-wider">🌙 月夜の魔法菓子店 ── DRUM LOTTERY</p>
         </header>
 
         <!-- タブ切り替えボタン -->
         <div class="flex rounded-xl p-1 bg-purple-950/80 border border-purple-700/60 gap-1">
-            <button onclick="switchTab('roulette')" id="tab-roulette" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all cinzel-font bg-amber-500 text-purple-950 shadow">
-                ROULETTE MENU
+            <button onclick="switchTab('roulette')" id="tab-roulette" class="flex-1 py-1.5 text-xs font-bold rounded-lg transition-all cinzel-font bg-amber-500 text-purple-950 shadow">
+                MENU DRUM
             </button>
-            <button onclick="switchTab('beans')" id="tab-beans" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all cinzel-font text-purple-300 hover:text-amber-300">
-                BEANS GUIDE
+            <button onclick="switchTab('beans')" id="tab-beans" class="flex-1 py-1.5 text-xs font-bold rounded-lg transition-all cinzel-font text-purple-300 hover:text-amber-300">
+                BEANS DRUM
             </button>
         </div>
 
-        <!-- ================= 1. ROULETTE タブ画面 ================= -->
-        <div id="view-roulette" class="space-y-6">
+        <!-- ================= 1. ROULETTE (MENU) タブ画面 ================= -->
+        <div id="view-roulette" class="space-y-5">
             
             <!-- コイントスセクション -->
             <section class="glass-panel rounded-2xl p-4 text-center relative overflow-hidden">
-                <h2 class="cinzel-font text-base font-bold text-amber-300 mb-1 flex items-center justify-center gap-2">
+                <h2 class="cinzel-font text-sm font-bold text-amber-300 mb-1 flex items-center justify-center gap-2">
                     <span>🪙</span> COIN TOSS <span>🪙</span>
                 </h2>
-                <p class="text-[11px] text-purple-200 mb-3">コインを投げて、運命のルートを決めよう！</p>
+                <p class="text-[11px] text-purple-200 mb-2">コインを投げて、運命のルートを決めよう！</p>
 
-                <div class="flex justify-center mb-3">
-                    <div id="coin-container" class="w-20 h-20 rounded-full bg-gradient-to-br from-amber-200 via-yellow-400 to-amber-600 p-1 shadow-xl shadow-amber-500/30 flex items-center justify-center border-2 border-amber-100">
+                <div class="flex justify-center mb-2">
+                    <div id="coin-container" class="w-16 h-16 rounded-full bg-gradient-to-br from-amber-200 via-yellow-400 to-amber-600 p-1 shadow-xl shadow-amber-500/30 flex items-center justify-center border-2 border-amber-100">
                         <div id="coin" class="w-full h-full rounded-full border border-amber-900/40 flex flex-col items-center justify-center bg-gradient-to-tr from-amber-500 to-yellow-300 text-purple-950 font-black cinzel-font text-xs shadow-inner">
-                            <span id="coin-text" class="text-[11px] tracking-tighter font-black">TRICK</span>
-                            <span class="text-[8px] opacity-75">or</span>
-                            <span id="coin-subtext" class="text-[11px] tracking-tighter font-black">TREAT</span>
+                            <span id="coin-text" class="text-[10px] tracking-tighter font-black">TRICK</span>
+                            <span class="text-[7px] opacity-75">or</span>
+                            <span id="coin-subtext" class="text-[10px] tracking-tighter font-black">TREAT</span>
                         </div>
                     </div>
                 </div>
 
-                <button onclick="tossCoin()" id="coin-btn" class="w-full py-2.5 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-purple-950 font-black rounded-xl shadow-lg hover:brightness-110 active:scale-95 transition-all cinzel-font tracking-wider text-xs border border-amber-200">
+                <button onclick="tossCoin()" id="coin-btn" class="w-full py-2 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-purple-950 font-black rounded-xl shadow-lg hover:brightness-110 active:scale-95 transition-all cinzel-font tracking-wider text-xs border border-amber-200">
                     COIN TOSS START
                 </button>
-                <div id="coin-result" class="mt-2 text-xs font-bold text-amber-300 h-5"></div>
+                <div id="coin-result" class="mt-1.5 text-xs font-bold text-amber-300 h-4"></div>
             </section>
 
-            <!-- TRICK 6マスルーレット -->
-            <section class="glass-panel rounded-2xl p-4 space-y-3 border-purple-600/50">
+            <!-- TRICK ドラム抽選 -->
+            <section class="glass-panel rounded-2xl p-4 space-y-3 border-purple-600/50 text-center">
                 <div class="flex items-center justify-between">
-                    <h3 class="cinzel-font text-sm font-bold text-purple-300 flex items-center gap-1.5">
-                        <span>👻</span> TRICK 運命の6マス
+                    <h3 class="cinzel-font text-xs font-bold text-purple-300 flex items-center gap-1.5">
+                        <span>👻</span> TRICK ドラム抽選 (全6種)
                     </h3>
-                    <span class="text-[10px] bg-purple-900/80 text-purple-200 px-2 py-0.5 rounded-full border border-purple-700">全6種</span>
+                    <span class="text-[9px] bg-purple-900/80 text-purple-200 px-2 py-0.5 rounded-full border border-purple-700">抽選機</span>
                 </div>
 
-                <div class="grid grid-cols-2 gap-2">
-                    <div id="trick-card-1" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                        <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
-                            <span>①小悪魔のいたずら</span>
-                            <span class="text-[9px] text-purple-400">No.1</span>
-                        </div>
-                        <div class="my-0.5">
-                            <div class="text-xs font-bold text-pink-100 truncate">小悪魔のいたずら</div>
-                            <div class="text-[10px] text-purple-300 truncate">Lv.1のビーンズ1粒 😈</div>
-                        </div>
-                    </div>
-                    <div id="trick-card-2" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                        <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
-                            <span>②魔女の気まぐれ</span>
-                            <span class="text-[9px] text-purple-400">No.2</span>
-                        </div>
-                        <div class="my-0.5">
-                            <div class="text-xs font-bold text-pink-100 truncate">魔女の気まぐれ</div>
-                            <div class="text-[10px] text-purple-300 truncate">Lv.2のビーンズ1粒 🔮</div>
-                        </div>
-                    </div>
-                    <div id="trick-card-3" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                        <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
-                            <span>③禁断の一粒</span>
-                            <span class="text-[9px] text-purple-400">No.3</span>
-                        </div>
-                        <div class="my-0.5">
-                            <div class="text-xs font-bold text-pink-100 truncate">禁断の一粒</div>
-                            <div class="text-[10px] text-purple-300 truncate">Lv.3のビーンズ1粒 👑</div>
-                        </div>
-                    </div>
-                    <div id="trick-card-4" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                        <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
-                            <span>④リスナーの悪だくみ</span>
-                            <span class="text-[9px] text-purple-400">No.4</span>
-                        </div>
-                        <div class="my-0.5">
-                            <div class="text-xs font-bold text-pink-100 truncate">リスナーの悪だくみ</div>
-                            <div class="text-[10px] text-purple-300 truncate">Lv.1～3を指定 ❓</div>
-                        </div>
-                    </div>
-                    <div id="trick-card-5" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                        <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
-                            <span>⑤いたずら回避！</span>
-                            <span class="text-[9px] text-purple-400">No.5</span>
-                        </div>
-                        <div class="my-0.5">
-                            <div class="text-xs font-bold text-pink-100 truncate">いたずら回避！</div>
-                            <div class="text-[10px] text-purple-300 truncate">チョコ1個 🍫</div>
-                        </div>
-                    </div>
-                    <div id="trick-card-6" class="menu-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                        <div class="flex items-center justify-between text-[11px] font-bold text-purple-300">
-                            <span>⑥運命の一粒</span>
-                            <span class="text-[9px] text-purple-400">No.6</span>
-                        </div>
-                        <div class="my-0.5">
-                            <div class="text-xs font-bold text-pink-100 truncate">運命の一粒</div>
-                            <div class="text-[10px] text-purple-300 truncate">全レベルからランダム 🎁</div>
-                        </div>
+                <!-- スロット窓 -->
+                <div class="slot-window h-16 rounded-xl flex items-center justify-center">
+                    <div class="absolute inset-x-0 top-0 h-4 bg-gradient-to-b from-black/60 to-transparent pointer-events-none z-10"></div>
+                    <div class="absolute inset-x-0 bottom-0 h-4 bg-gradient-to-t from-black/60 to-transparent pointer-events-none z-10"></div>
+                    <div id="slot-trick" class="text-amber-200 font-bold text-sm">
+                        <span class="text-purple-400 text-xs">ボタンを押してドラムを回そう！</span>
                     </div>
                 </div>
 
-                <button onclick="spinRoulette('trick')" id="trick-btn" class="w-full py-2.5 bg-gradient-to-r from-purple-700 via-purple-800 to-purple-950 text-purple-100 font-bold rounded-xl shadow hover:brightness-110 active:scale-95 transition-all text-xs cinzel-font tracking-wider border border-purple-500/50">
-                    TRICK ルーレット START
+                <button onclick="spinMenuDrum('trick')" id="trick-btn" class="w-full py-2.5 bg-gradient-to-r from-purple-700 via-purple-800 to-purple-950 text-purple-100 font-bold rounded-xl shadow hover:brightness-110 active:scale-95 transition-all text-xs cinzel-font tracking-wider border border-purple-500/50">
+                    👻 TRICK ドラム START
                 </button>
             </section>
 
-            <!-- TREAT 6マスルーレット -->
-            <section class="glass-panel rounded-2xl p-4 space-y-3 border-amber-600/50">
+            <!-- TREAT ドラム抽選 -->
+            <section class="glass-panel rounded-2xl p-4 space-y-3 border-amber-600/50 text-center">
                 <div class="flex items-center justify-between">
-                    <h3 class="cinzel-font text-sm font-bold text-amber-300 flex items-center gap-1.5">
-                        <span>🍬</span> TREAT 運命の6マス
+                    <h3 class="cinzel-font text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                        <span>🍬</span> TREAT ドラム抽選 (全6種)
                     </h3>
-                    <span class="text-[10px] bg-amber-900/80 text-amber-200 px-2 py-0.5 rounded-full border border-amber-700">全6種</span>
+                    <span class="text-[9px] bg-amber-900/80 text-amber-200 px-2 py-0.5 rounded-full border border-amber-700">抽選機</span>
                 </div>
 
-                <div class="grid grid-cols-2 gap-2">
-                    <div id="treat-card-1" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                        <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
-                            <span>①チョコ</span>
-                            <span class="text-[9px] text-amber-400">No.1</span>
-                        </div>
-                        <div class="my-0.5">
-                            <div class="text-xs font-bold text-amber-100 truncate">チョコ</div>
-                            <div class="text-[10px] text-amber-200/80 truncate">チョコ1個 🍫</div>
-                        </div>
-                    </div>
-                    <div id="treat-card-2" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                        <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
-                            <span>②神座と乾杯！</span>
-                            <span class="text-[9px] text-amber-400">No.2</span>
-                        </div>
-                        <div class="my-0.5">
-                            <div class="text-xs font-bold text-amber-100 truncate">神座と乾杯！</div>
-                            <div class="text-[10px] text-amber-200/80 truncate">乾杯タイム 🥂</div>
-                        </div>
-                    </div>
-                    <div id="treat-card-3" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                        <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
-                            <span>③差し入れギフト</span>
-                            <span class="text-[9px] text-amber-400">No.3</span>
-                        </div>
-                        <div class="my-0.5">
-                            <div class="text-xs font-bold text-amber-100 truncate">差し入れギフト</div>
-                            <div class="text-[10px] text-amber-200/80 truncate">食べ物系ギフト(任意) 🎁</div>
-                        </div>
-                    </div>
-                    <div id="treat-card-4" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                        <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
-                            <span>④おつまみ</span>
-                            <span class="text-[9px] text-amber-400">No.4</span>
-                        </div>
-                        <div class="my-0.5">
-                            <div class="text-xs font-bold text-amber-100 truncate">おつまみ</div>
-                            <div class="text-[10px] text-amber-200/80 truncate">おつまみひと口 🧀</div>
-                        </div>
-                    </div>
-                    <div id="treat-card-5" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                        <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
-                            <span>⑤神座と乾杯！</span>
-                            <span class="text-[9px] text-amber-400">No.5</span>
-                        </div>
-                        <div class="my-0.5">
-                            <div class="text-xs font-bold text-amber-100 truncate">神座と乾杯！</div>
-                            <div class="text-[10px] text-amber-200/80 truncate">乾杯タイム 🥂</div>
-                        </div>
-                    </div>
-                    <div id="treat-card-6" class="menu-card bg-amber-950/50 border border-amber-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[65px]">
-                        <div class="flex items-center justify-between text-[11px] font-bold text-amber-300">
-                            <span>⑥ご褒美セレクト</span>
-                            <span class="text-[9px] text-amber-400">No.6</span>
-                        </div>
-                        <div class="my-0.5">
-                            <div class="text-xs font-bold text-amber-100 truncate">ご褒美セレクト</div>
-                            <div class="text-[10px] text-amber-200/80 truncate">チョコ or おつまみ 🤎</div>
-                        </div>
+                <!-- スロット窓 -->
+                <div class="slot-window h-16 rounded-xl flex items-center justify-center">
+                    <div class="absolute inset-x-0 top-0 h-4 bg-gradient-to-b from-black/60 to-transparent pointer-events-none z-10"></div>
+                    <div class="absolute inset-x-0 bottom-0 h-4 bg-gradient-to-t from-black/60 to-transparent pointer-events-none z-10"></div>
+                    <div id="slot-treat" class="text-amber-200 font-bold text-sm">
+                        <span class="text-amber-400/80 text-xs">ボタンを押してドラムを回そう！</span>
                     </div>
                 </div>
 
-                <button onclick="spinRoulette('treat')" id="treat-btn" class="w-full py-2.5 bg-gradient-to-r from-amber-700 via-amber-800 to-amber-950 text-amber-100 font-bold rounded-xl shadow hover:brightness-110 active:scale-95 transition-all text-xs cinzel-font tracking-wider border border-amber-500/50">
-                    TREAT ルーレット START
+                <button onclick="spinMenuDrum('treat')" id="treat-btn" class="w-full py-2.5 bg-gradient-to-r from-amber-700 via-amber-800 to-amber-950 text-amber-100 font-bold rounded-xl shadow hover:brightness-110 active:scale-95 transition-all text-xs cinzel-font tracking-wider border border-amber-500/50">
+                    🍬 TREAT ドラム START
                 </button>
             </section>
 
         </div>
 
         <!-- ================= 2. BEANS GUIDE タブ画面 ================= -->
-        <div id="view-beans" class="space-y-6 hidden">
+        <div id="view-beans" class="space-y-5 hidden">
             
-            <section class="glass-panel rounded-2xl p-4 text-center relative overflow-hidden border-purple-500">
-                <h2 class="cinzel-font text-base font-bold text-amber-300 mb-1 flex items-center justify-center gap-2">
-                    <span>🍬</span> BEANS GUIDE <span>🍬</span>
+            <section class="glass-panel rounded-2xl p-4 text-center relative overflow-hidden border-purple-500 space-y-3">
+                <h2 class="cinzel-font text-sm font-bold text-amber-300 mb-1 flex items-center justify-center gap-2">
+                    <span>🍬</span> BEANS DRUM GUIDE <span>🍬</span>
                 </h2>
-                <p class="text-[11px] text-purple-200 mb-3">百味ビーンズ 難易度別ルーレット！</p>
+                <p class="text-[10px] text-purple-200 mb-2">百味ビーンズ ドラム抽選！</p>
 
                 <!-- レベル選択ボタン -->
-                <div class="grid grid-cols-4 gap-1.5 mb-4">
-                    <button onclick="selectBeansLevel('all')" id="btn-lv-all" class="py-2 px-1 text-[11px] font-bold rounded-lg bg-amber-500 text-purple-950 transition-all cinzel-font shadow">全Lv</button>
-                    <button onclick="selectBeansLevel('1')" id="btn-lv-1" class="py-2 px-1 text-[11px] font-bold rounded-lg bg-purple-900/80 text-purple-200 border border-purple-600 transition-all cinzel-font">Lv.1</button>
-                    <button onclick="selectBeansLevel('2')" id="btn-lv-2" class="py-2 px-1 text-[11px] font-bold rounded-lg bg-purple-900/80 text-purple-200 border border-purple-600 transition-all cinzel-font">Lv.2</button>
-                    <button onclick="selectBeansLevel('3')" id="btn-lv-3" class="py-2 px-1 text-[11px] font-bold rounded-lg bg-purple-900/80 text-purple-200 border border-purple-600 transition-all cinzel-font">Lv.3</button>
+                <div class="grid grid-cols-4 gap-1 mb-2">
+                    <button onclick="selectBeansLevel('all')" id="btn-lv-all" class="py-1.5 px-1 text-[10px] font-bold rounded-lg bg-amber-500 text-purple-950 transition-all cinzel-font shadow">全Lv</button>
+                    <button onclick="selectBeansLevel('1')" id="btn-lv-1" class="py-1.5 px-1 text-[10px] font-bold rounded-lg bg-purple-900/80 text-purple-200 border border-purple-600 transition-all cinzel-font">Lv.1</button>
+                    <button onclick="selectBeansLevel('2')" id="btn-lv-2" class="py-1.5 px-1 text-[10px] font-bold rounded-lg bg-purple-900/80 text-purple-200 border border-purple-600 transition-all cinzel-font">Lv.2</button>
+                    <button onclick="selectBeansLevel('3')" id="btn-lv-3" class="py-1.5 px-1 text-[10px] font-bold rounded-lg bg-purple-900/80 text-purple-200 border border-purple-600 transition-all cinzel-font">Lv.3</button>
                 </div>
 
-                <!-- ビーンズ一覧コンテナ -->
-                <div id="beans-container" class="mb-4">
-                    <!-- JSで動的生成 -->
+                <!-- ビーンズ専用スロット窓 -->
+                <div class="slot-window h-20 rounded-xl flex items-center justify-center">
+                    <div class="absolute inset-x-0 top-0 h-4 bg-gradient-to-b from-black/60 to-transparent pointer-events-none z-10"></div>
+                    <div class="absolute inset-x-0 bottom-0 h-4 bg-gradient-to-t from-black/60 to-transparent pointer-events-none z-10"></div>
+                    <div id="slot-beans" class="text-amber-200 font-bold text-sm px-2">
+                        <span class="text-purple-300 text-xs">難易度を選んでドラムを回そう！</span>
+                    </div>
                 </div>
 
-                <button onclick="spinBeansRoulette()" id="beans-btn" class="w-full py-3 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-purple-950 font-black rounded-xl shadow-lg hover:brightness-110 active:scale-95 transition-all cinzel-font tracking-wider text-xs border border-amber-200">
-                    BEANS ルーレット START 🎲
+                <button onclick="spinBeansDrum()" id="beans-btn" class="w-full py-3 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-purple-950 font-black rounded-xl shadow-lg hover:brightness-110 active:scale-95 transition-all cinzel-font tracking-wider text-xs border border-amber-200">
+                    BEANS ドラム START 🎲
                 </button>
-                <div id="beans-result" class="mt-3 text-xs font-bold text-amber-300 h-6"></div>
             </section>
 
         </div>
 
         <!-- ================= 共通：結果履歴セクション ================= -->
-        <section class="glass-panel rounded-2xl p-4">
-            <div class="flex items-center justify-between mb-2">
-                <h3 class="cinzel-font text-xs font-bold text-amber-300 flex items-center gap-1">
+        <section class="glass-panel rounded-2xl p-3.5">
+            <div class="flex items-center justify-between mb-1.5">
+                <h3 class="cinzel-font text-[11px] font-bold text-amber-300 flex items-center gap-1">
                     <span>📜</span> RESULT HISTORY
                 </h3>
                 <button onclick="clearHistory()" class="text-[10px] text-purple-300 hover:text-amber-300 underline transition-colors">
                     履歴をクリア
                 </button>
             </div>
-            <div id="history-list" class="space-y-1.5 max-h-40 overflow-y-auto pr-1 text-xs">
-                <div class="text-center text-purple-400/70 py-3 italic text-[11px]">
+            <div id="history-list" class="space-y-1 max-h-32 overflow-y-auto pr-1 text-xs">
+                <div class="text-center text-purple-400/70 py-2 italic text-[10px]">
                     まだ結果の履歴はありません
                 </div>
             </div>
         </section>
 
         <!-- フッター特記事項 -->
-        <footer class="text-center text-[10px] text-purple-400 space-y-1 pb-4">
+        <footer class="text-center text-[10px] text-purple-400 space-y-0.5 pb-2">
             <p>1000Cで好きな番号を指定できるよ！</p>
             <p class="cinzel-font text-purple-500">KAMUKURA REI / REALITY</p>
         </footer>
@@ -363,14 +273,13 @@
             if (tab === 'roulette') {
                 rouletteView.classList.remove('hidden');
                 beansView.classList.add('hidden');
-                tabRoulette.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all cinzel-font bg-amber-500 text-purple-950 shadow";
-                tabBeans.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all cinzel-font text-purple-300 hover:text-amber-300";
+                tabRoulette.className = "flex-1 py-1.5 text-xs font-bold rounded-lg transition-all cinzel-font bg-amber-500 text-purple-950 shadow";
+                tabBeans.className = "flex-1 py-1.5 text-xs font-bold rounded-lg transition-all cinzel-font text-purple-300 hover:text-amber-300";
             } else {
                 rouletteView.classList.add('hidden');
                 beansView.classList.remove('hidden');
-                tabBeans.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all cinzel-font bg-purple-700 text-amber-300 shadow border border-purple-500";
-                tabRoulette.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all cinzel-font text-purple-300 hover:text-amber-300";
-                renderBeansGrid();
+                tabBeans.className = "flex-1 py-1.5 text-xs font-bold rounded-lg transition-all cinzel-font bg-purple-700 text-amber-300 shadow border border-purple-500";
+                tabRoulette.className = "flex-1 py-1.5 text-xs font-bold rounded-lg transition-all cinzel-font text-purple-300 hover:text-amber-300";
             }
         }
 
@@ -379,65 +288,11 @@
             ['all', '1', '2', '3'].forEach(l => {
                 const btn = document.getElementById(`btn-lv-${l}`);
                 if (l === lv) {
-                    btn.className = "py-2 px-1 text-[11px] font-bold rounded-lg bg-amber-500 text-purple-950 transition-all cinzel-font shadow";
+                    btn.className = "py-1.5 px-1 text-[10px] font-bold rounded-lg bg-amber-500 text-purple-950 transition-all cinzel-font shadow";
                 } else {
-                    btn.className = "py-2 px-1 text-[11px] font-bold rounded-lg bg-purple-900/80 text-purple-200 border border-purple-600 transition-all cinzel-font";
+                    btn.className = "py-1.5 px-1 text-[10px] font-bold rounded-lg bg-purple-900/80 text-purple-200 border border-purple-600 transition-all cinzel-font";
                 }
             });
-            renderBeansGrid();
-        }
-
-        // ビーンズ一覧の描画（全Lv時はスクロールなし、個別Lv時はスクロールあり）
-        function renderBeansGrid() {
-            const container = document.getElementById('beans-container');
-
-            if (currentBeansLv === 'all') {
-                const lv1Items = beansData.filter(b => b.lv === 1);
-                const lv2Items = beansData.filter(b => b.lv === 2);
-                const lv3Items = beansData.filter(b => b.lv === 3);
-
-                const renderCards = (items) => items.map(b => `
-                    <div id="beans-card-${b.id}" class="beans-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[55px]">
-                        <div class="flex items-center justify-between text-[10px] font-bold text-amber-300">
-                            <span>${b.name}</span>
-                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-900 text-purple-300 border border-purple-700">${b.lvName}</span>
-                        </div>
-                        <div class="text-[10px] text-purple-200 mt-1 truncate">${b.desc}</div>
-                    </div>
-                `).join('');
-
-                container.innerHTML = `
-                    <div class="space-y-3 text-left">
-                        <div>
-                            <div class="text-xs font-bold text-amber-300 cinzel-font mb-1.5 border-b border-purple-800 pb-0.5">✨ Lv.1 小悪魔のいたずら</div>
-                            <div class="grid grid-cols-2 gap-2">${renderCards(lv1Items)}</div>
-                        </div>
-                        <div>
-                            <div class="text-xs font-bold text-purple-300 cinzel-font mb-1.5 border-b border-purple-800 pb-0.5">🔮 Lv.2 魔女の気まぐれ</div>
-                            <div class="grid grid-cols-2 gap-2">${renderCards(lv2Items)}</div>
-                        </div>
-                        <div>
-                            <div class="text-xs font-bold text-pink-400 cinzel-font mb-1.5 border-b border-purple-800 pb-0.5">👑 Lv.3 禁断の一粒</div>
-                            <div class="grid grid-cols-2 gap-2">${renderCards(lv3Items)}</div>
-                        </div>
-                    </div>
-                `;
-            } else {
-                const filteredBeans = beansData.filter(b => b.lv.toString() === currentBeansLv);
-                container.innerHTML = `
-                    <div class="grid grid-cols-2 gap-2 text-left max-h-72 overflow-y-auto pr-1">
-                        ${filteredBeans.map(b => `
-                            <div id="beans-card-${b.id}" class="beans-card bg-purple-950/70 border border-purple-800/80 rounded-xl p-2.5 flex flex-col justify-between min-h-[60px]">
-                                <div class="flex items-center justify-between text-[10px] font-bold text-amber-300">
-                                    <span>${b.name}</span>
-                                    <span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-900 text-purple-300 border border-purple-700">${b.lvName}</span>
-                                </div>
-                                <div class="text-[10px] text-purple-200 mt-1 truncate">${b.desc}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-            }
         }
 
         function addHistory(type, title, detail) {
@@ -452,7 +307,7 @@
         function renderHistory() {
             const container = document.getElementById('history-list');
             if (historyData.length === 0) {
-                container.innerHTML = '<div class="text-center text-purple-400/70 py-3 italic text-[11px]">まだ結果の履歴はありません</div>';
+                container.innerHTML = '<div class="text-center text-purple-400/70 py-2 italic text-[10px]">まだ結果の履歴はありません</div>';
                 return;
             }
 
@@ -481,6 +336,7 @@
             renderHistory();
         }
 
+        // コイントスアニメーション
         function tossCoin() {
             const coin = document.getElementById('coin');
             const btn = document.getElementById('coin-btn');
@@ -503,118 +359,133 @@
                 document.getElementById('coin-text').innerText = isTrick ? "TRICK" : "TREAT";
                 document.getElementById('coin-subtext').innerText = isTrick ? "✦" : "✦";
                 
-                resultDiv.innerHTML = `<span class="text-amber-400 font-black text-sm animate-bounce">✨ 結果：${resultText}ルート！ ✨</span>`;
+                resultDiv.innerHTML = `<span class="text-amber-400 font-black text-xs animate-bounce">✨ 結果：${resultText}ルート！ ✨</span>`;
                 
                 addHistory('COIN', `コイントス`, `${resultText}が出ました`);
                 btn.disabled = false;
             }, 1000);
         }
 
-        function spinRoulette(type) {
+        // メニュー（TRICK / TREAT）のドラム抽選演出
+        function spinMenuDrum(type) {
             const items = type === 'trick' ? trickItems : treatItems;
+            const slotEl = document.getElementById(`slot-${type}`);
             const btnEl = document.getElementById(`${type}-btn`);
             
             btnEl.disabled = true;
-
-            items.forEach(item => {
-                const card = document.getElementById(`${type}-card-${item.id}`);
-                if(card) card.classList.remove('active-highlight');
-            });
-
             let counter = 0;
-            const maxCount = 14; 
-            const intervalTime = 70;
+            const maxCount = 22; // ドラム回転数（多めで盛り上げ）
+            let speed = 50;
 
-            const timer = setInterval(() => {
-                items.forEach(item => {
-                    const card = document.getElementById(`${type}-card-${item.id}`);
-                    if(card) card.classList.remove('active-highlight');
-                });
-
+            const drumInterval = setInterval(() => {
                 const randomItem = items[Math.floor(Math.random() * items.length)];
-                const targetCard = document.getElementById(`${type}-card-${randomItem.id}`);
-                if(targetCard) targetCard.classList.add('active-highlight');
-
+                slotEl.innerHTML = `
+                    <div class="text-xs text-purple-300">ドラム回転中...🌀</div>
+                    <div class="text-sm font-bold text-amber-300">【${randomItem.id}】${randomItem.name}</div>
+                `;
                 counter++;
 
-                if (counter >= maxCount) {
-                    clearInterval(timer);
+                // 終盤に向けてスピードが徐々に遅くなる演出（タメ）
+                if (counter > maxCount - 6) {
+                    clearInterval(drumInterval);
+                    slowDownMenuDrum(type, items, slotEl, btnEl);
+                }
+            }, speed);
+        }
+
+        function slowDownMenuDrum(type, items, slotEl, btnEl) {
+            let slowSteps = 0;
+            const maxSlowSteps = 5;
+            let currentDelay = 120;
+
+            const slowStep = () => {
+                const randomItem = items[Math.floor(Math.random() * items.length)];
+                slotEl.innerHTML = `
+                    <div class="text-xs text-amber-400 animate-pulse">運命決定間近...✨</div>
+                    <div class="text-sm font-bold text-amber-200">【${randomItem.id}】${randomItem.name}</div>
+                `;
+                slowSteps++;
+
+                if (slowSteps < maxSlowSteps) {
+                    currentDelay += 80;
+                    setTimeout(slowStep, currentDelay);
+                } else {
+                    // 最終結果確定！
                     const finalItem = items[Math.floor(Math.random() * items.length)];
-                    
-                    items.forEach(item => {
-                        const card = document.getElementById(`${type}-card-${item.id}`);
-                        if(card) card.classList.remove('active-highlight');
-                    });
-                    const finalCard = document.getElementById(`${type}-card-${finalItem.id}`);
-                    if(finalCard) finalCard.classList.add('active-highlight');
+                    slotEl.innerHTML = `
+                        <div class="text-[10px] text-amber-400 font-bold uppercase tracking-widest">🎯 決定！</div>
+                        <div class="text-base font-black text-amber-300 animate-result">【${finalItem.id}】${finalItem.name}</div>
+                        <div class="text-[10px] text-purple-200">${finalItem.desc}</div>
+                    `;
 
                     addHistory(type.toUpperCase(), `【${finalItem.id}】${finalItem.name}`, finalItem.desc);
                     btnEl.disabled = false;
                 }
-            }, intervalTime);
+            };
+            setTimeout(slowStep, currentDelay);
         }
 
-        function spinBeansRoulette() {
+        // 百味ビーンズのドラム抽選演出
+        function spinBeansDrum() {
             const targetBeans = currentBeansLv === 'all' 
                 ? beansData 
                 : beansData.filter(b => b.lv.toString() === currentBeansLv);
             
+            const slotEl = document.getElementById('slot-beans');
             const btnEl = document.getElementById('beans-btn');
-            const resultDiv = document.getElementById('beans-result');
             
             if (targetBeans.length === 0) return;
 
             btnEl.disabled = true;
-            resultDiv.innerHTML = '<span class="text-purple-300 animate-pulse">百味ビーンズがランダム選定中...🍬</span>';
-
-            targetBeans.forEach(b => {
-                const card = document.getElementById(`beans-card-${b.id}`);
-                if(card) card.classList.remove('active-highlight');
-            });
-
             let counter = 0;
-            const maxCount = 15;
-            const intervalTime = 70;
+            const maxCount = 22;
+            let speed = 50;
 
-            const timer = setInterval(() => {
-                targetBeans.forEach(b => {
-                    const card = document.getElementById(`beans-card-${b.id}`);
-                    if(card) card.classList.remove('active-highlight');
-                });
-
+            const beanInterval = setInterval(() => {
                 const randomBean = targetBeans[Math.floor(Math.random() * targetBeans.length)];
-                const targetCard = document.getElementById(`beans-card-${randomBean.id}`);
-                if(targetCard) {
-                    targetCard.classList.add('active-highlight');
-                    targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }
-
+                slotEl.innerHTML = `
+                    <div class="text-xs text-purple-300">百味ビーンズ抽選中...🍬</div>
+                    <div class="text-sm font-bold text-amber-300">[${randomBean.lvName}] ${randomBean.name}</div>
+                `;
                 counter++;
 
-                if (counter >= maxCount) {
-                    clearInterval(timer);
-                    const finalBean = targetBeans[Math.floor(Math.random() * targetBeans.length)];
-                    
-                    targetBeans.forEach(b => {
-                        const card = document.getElementById(`beans-card-${b.id}`);
-                        if(card) card.classList.remove('active-highlight');
-                    });
-                    const finalCard = document.getElementById(`beans-card-${finalBean.id}`);
-                    if(finalCard) {
-                        finalCard.classList.add('active-highlight');
-                        finalCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                    }
+                if (counter > maxCount - 6) {
+                    clearInterval(beanInterval);
+                    slowDownBeansDrum(targetBeans, slotEl, btnEl);
+                }
+            }, speed);
+        }
 
-                    resultDiv.innerHTML = `<span class="text-amber-400 font-black text-sm animate-bounce">🎯 結果：[${finalBean.lvName}] ${finalBean.name}！</span>`;
+        function slowDownBeansDrum(targetBeans, slotEl, btnEl) {
+            let slowSteps = 0;
+            const maxSlowSteps = 5;
+            let currentDelay = 120;
+
+            const slowStep = () => {
+                const randomBean = targetBeans[Math.floor(Math.random() * targetBeans.length)];
+                slotEl.innerHTML = `
+                    <div class="text-xs text-amber-400 animate-pulse">運命の一粒を選ぶ...✨</div>
+                    <div class="text-sm font-bold text-amber-200">[${randomBean.lvName}] ${randomBean.name}</div>
+                `;
+                slowSteps++;
+
+                if (slowSteps < maxSlowSteps) {
+                    currentDelay += 80;
+                    setTimeout(slowStep, currentDelay);
+                } else {
+                    const finalBean = targetBeans[Math.floor(Math.random() * targetBeans.length)];
+                    slotEl.innerHTML = `
+                        <div class="text-[10px] text-amber-400 font-bold uppercase tracking-widest">🎯 当たり！</div>
+                        <div class="text-base font-black text-amber-300 animate-result">[${finalBean.lvName}] ${finalBean.name}</div>
+                        <div class="text-[10px] text-purple-200">${finalBean.desc}</div>
+                    `;
+
                     addHistory('BEANS', `${finalBean.lvName}: ${finalBean.name}`, finalBean.desc);
                     btnEl.disabled = false;
                 }
-            }, intervalTime);
+            };
+            setTimeout(slowStep, currentDelay);
         }
-
-        window.onload = () => {
-            renderBeansGrid();
-        };
     </script>
 </body>
 </html>
